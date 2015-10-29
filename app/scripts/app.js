@@ -22,6 +22,11 @@ angular
   .config(function ($routeProvider, $locationProvider) {
     $routeProvider
       .when('/', {
+        templateUrl: 'views/main.html',
+        controller: 'MainCtrl',
+        controllerAs: 'main'
+      })
+      .when('/auth', {
         templateUrl: 'views/auth.html',
         controller: 'AuthCtrl',
         controllerAs: 'auth'
@@ -31,17 +36,28 @@ angular
         controller: 'AboutCtrl',
         controllerAs: 'about'
       })
+      .when('/radialChart', {
+        templateUrl: 'views/radialchart.html',
+        controller: 'RadialchartCtrl',
+        controllerAs: 'radialChart'
+      })
       .otherwise({
         redirectTo: '/'
       });
-       $locationProvider.html5Mode(true);
   })
   .constant('authConfig', {
       disabled: false,
       clientId: '',
       clientSecret: '',
       redirectUri: 'http://localhost:9000'
-    });
+    })
+  .run(function($rootScope, $location){
+    $rootScope.$on("$routeChangeStart", function(event, next, current) {
+      if($rootScope.authenticatedUser == null){
+        $location.path("/auth");
+      }
+    })
+  });
 
 
 angular

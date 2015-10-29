@@ -40,7 +40,7 @@
 
           <div class="collapse navbar-collapse" id="js-navbar-collapse" ng-controller="HeaderCtrl as header">
 
-            <ul class="nav navbar-nav">
+            <ul ng-hide="{{authenticatedUser !== true}}" class="nav navbar-nav">
               <li ng-class="{ active: header.isActive('/')}"><a href="#/">Home</a></li>
               <li ng-class="{ active: header.isActive('/about')}"><a ng-href="#/about">About</a></li>
               <li ng-class="{ active: header.isActive('/contact')}"><a ng-href="#/">Contact</a></li>
@@ -56,7 +56,6 @@
 
     <div class="footer">
       <div class="container">
-        <p><span class="glyphicon glyphicon-heart"></span> from the Yeoman team</p>
       </div>
     </div>
 
@@ -92,6 +91,7 @@
         <script src="scripts/controllers/auth.js"></script>
         <script src="scripts/controllers/about.js"></script>
         <script src="scripts/controllers/header.js"></script>
+        <script src="scripts/controllers/radialchart.js"></script>
         <!-- endbuild -->
 
 

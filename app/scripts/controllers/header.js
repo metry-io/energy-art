@@ -9,7 +9,7 @@
  */
 
  angular.module('energyArtApp')
-  .controller('HeaderCtrl', function ($location) {
+  .controller('HeaderCtrl', function ($location, $rootScope) {
     this.isActive = function (viewLocation) {
     	return viewLocation ===  $location.path();
     };
