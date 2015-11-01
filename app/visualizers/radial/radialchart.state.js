@@ -5,7 +5,7 @@ angular.module('energyArtApp')
 	  parent: 'sidebar',
 	  url: 'radialchart',
 	  templateUrl: 'visualizers/radial/radialchart.html',
-	  controller: 'RadialchartCtrl',
-	  controllerAs: 'radial'
+	  controller: 'visualizerCtrl',
+	  controllerAs: 'ctrl'
   })
 });

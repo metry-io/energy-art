@@ -4,6 +4,6 @@ angular.module('energyArtApp')
 			controller: 'sidebarCtrl',
 			controllerAs: 'sidebar',
 			bindToController: 'true',
-			templateUrl: 'main/sidebar.tmpl.html'
+			templateUrl: 'main/sidebar/sidebar.tmpl.html'
 		};
 	});

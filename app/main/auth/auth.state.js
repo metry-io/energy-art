@@ -2,7 +2,7 @@ angular.module('energyArtApp')
   .config(function ($stateProvider){
 	$stateProvider.state('auth', {
 	  url: '/auth',
-	  templateUrl: 'main/auth.html',
+	  templateUrl: 'main/auth/auth.html',
 	  controller: 'AuthCtrl'
   })
 });

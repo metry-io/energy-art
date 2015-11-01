@@ -2,9 +2,9 @@ angular.module('energyArtApp')
   .config(function ($stateProvider){
 	$stateProvider.state('heatmap', {
 	  parent: 'sidebar',
-	  url: 'heatmap/:ean',
+	  url: 'heatmap',
 	  templateUrl: 'visualizers/heatmap/heatmap.tmpl.html',
-	  controller: 'HeatmapCtrl',
-	  controllerAs: 'heatmap'
+	  controller: 'visualizerCtrl',
+	  controllerAs: 'ctrl'
   })
 });

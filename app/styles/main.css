@@ -161,13 +161,6 @@ html, body {
   text-align: center;
 }
 
-.radialchart{
-  position:fixed;
-  height:100%;
-  bottom:0;
-  right:0;
-}
-
 .sidebar-dropdown{
   color: #A4A4A4;
   background:#242424;
@@ -177,6 +170,48 @@ html, body {
   position: absolute;
   bottom: 0;
   margin: 40px;
+}
+
+.radialchart{
+  position:fixed;
+  bottom:0;
+  right:0;
+  height:100%;
+}
+
+.radialchart svg{
+  float: left;
+  height:100%;
+}
+
+.heatmap{
+  overflow:hidden;
+}
+
+.heatmap svg{
+  float:left;
+}
+
+/*
+  Hack on spinkit to force the loader to be in the center of the div
+*/
+.loading-indicator{
+  position:relative;
+  margin: 0 auto;
+  height:100%;
+}
+
+.wave-spinner{
+  margin:auto;
+}
+
+.spinner{
+  position: relative;
+  top:50%;
+  margin: 0 auto;
+  -webkit-transform: translateY(-50%);
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
 }
 
 /*

@@ -3,7 +3,7 @@ angular.module('energyArtApp')
 	$stateProvider.state('sidebar', {
 	  parent: 'main',
 	  url: '/',
-	  templateUrl: 'main/sidebar.html',
+	  templateUrl: 'main/sidebar/sidebar.html',
 	  controller: 'sidebarCtrl'
   })
 });

@@ -1,5 +1,5 @@
 angular.module('visualizers', ['energimolnet'])
-  .service('visualizersService', function () {
+  .service('visService', function () {
     var service = this;
     service.meter = undefined;
     service.visualizer = undefined;
@@ -14,5 +14,6 @@ angular.module('visualizers', ['energimolnet'])
 	    		"granularity": "day"
 	    	}
     	];
+
 
   });

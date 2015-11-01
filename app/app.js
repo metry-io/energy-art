@@ -21,7 +21,8 @@ angular
     'ui.router',
     'ui.bootstrap',
     'commons',
-    'visualizers'
+    'visualizers',
+    'angular-spinkit'
   ])
   .config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/');

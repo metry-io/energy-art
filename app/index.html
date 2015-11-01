@@ -10,6 +10,7 @@
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <link rel='stylesheet' href='bower_components/bootstrap/dist/css/bootstrap.css' />
+    <link rel='stylesheet' href='bower_components/angular-spinkit/build/angular-spinkit.min.css' />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
@@ -59,24 +60,33 @@
     <script src="bower_components/energimolnet-ng/dist/energimolnet.js"></script>
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/angular-spinkit/build/angular-spinkit.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="commons/commons.service.js"></script>
+
         <script src="app.js"></script>
         <script src="appConstatConfig.js"></script>
+
         <script src="main/main.state.js"></script>
-        <script src="main/sidebar.state.js"></script>
-        <script src="main/auth.state.js"></script>
-        <script src="main/auth.js"></script>
-        <script src="main/menu.js"></script>
-        <script src="main/sidebar.directive.js"></script>
-        <script src="main/sidebar.controller.js"></script>
+
+        <script src="main/auth/auth.js"></script>
+        <script src="main/auth/auth.state.js"></script>
+
+        <script src="commons/loader/loader.directive.js"></script>
+
+        <script src="main/sidebar/sidebar.state.js"></script>
+        <script src="main/sidebar/sidebar.directive.js"></script>
+        <script src="main/sidebar/sidebar.controller.js"></script>
+
         <script src="visualizers/visualizers.service.js"></script>
-        <script src="visualizers/datepicker.directive.js"></script>
+        <script src="visualizers/visualizers.ctrl.js"></script>
+
         <script src="visualizers/radial/radialchart.state.js"></script>
         <script src="visualizers/radial/radialchart.ctrl.js"></script>
+
         <script src="visualizers/heatmap/heatmap.state.js"></script>
         <script src="visualizers/heatmap/heatmap.ctrl.js"></script>
         <!-- endbuild -->
