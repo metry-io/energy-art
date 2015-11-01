@@ -1,0 +1,27 @@
+<div class="col-sm-3 col-md-2 sidebar">
+	<h2>Meter Info</h2>
+	<div class="meter-info center-block" ng-bind-html="sidebar.printMeterInfo()" />
+
+	<div class="form-group">
+		<label for="visualizerSel">Select Meter</label>
+		<select class="sidebar-dropdown" ng-init="selectedMeter = sidebar.meters[0]" ng-model="selectedMeter" ng-change="sidebar.selectMeter(selectedMeter)" ng-options="meter as meter.ean for meter in sidebar.meters" />
+	</div>
+
+	<div class="form-group">
+		<label for="visualizerSel">Select Visualizer</label>
+			<select class="sidebar-dropdown" ng-model="selectedVisualizer" ng-change="sidebar.selectVisualizer(selectedVisualizer)" ng-options="visualizer as visualizer.name for visualizer in sidebar.visualizers" />
+	</div>
+
+	<!--
+	<h2>Select year</h2>
+	<div style="display:inline-block; min-height:250px;">
+	      <uib-datepicker ng-model="date" format-year="yy" min-mode="year" ng-model="dt" min-date="sidebar.first" max-date="sidebar.last" class="well well-sm" custom-class="getDayClass(date, mode)"></uib-datepicker>
+	</div>
+	-->
+
+	<div class="btn-group">
+		<button class="btn btn-danger" ng-click="sidebar.logOut()">Log out</button>
+		<button class="btn btn-success" ng-click="sidebar.loadVisualizer(date)">Visualize</button>
+	</div>
+
+</div>

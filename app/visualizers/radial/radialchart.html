@@ -1,0 +1,10 @@
+<div>
+  <svg class="radialchart col-md-10" viewBox="-200 0 1700 10">
+    <g ng-repeat="day in radial.days track by $index">
+      <g ng-repeat="hour in day track by $index">
+        <path ng-attr-d="{{radial.getPath($parent.$index,$index,500)}}" ng-style="::{stroke: radial.getColor(hour)}" ng-attr-stroke-width="{{radial.getStroke(hour)}}"/>
+      </g>
+    </g>
+  </svg>
+
+</div>

@@ -1,0 +1,10 @@
+<div>
+<svg class="heatmap col-md-10" viewBox="0 0 700 900">
+    <g ng-repeat="day in heatmap.days track by $index">
+      <g ng-repeat="hour in day track by $index">
+        <title>Consumtion {{ hour }} kWh</title>
+        <rect ng-attr-x="{{::$parent.$index * 2}}" ng-attr-y="{{::$index * 16}}" width="2" height="16" ng-style="::{fill: heatmap.getColor(hour)}"/>
+      </g>
+    </g>
+ </svg>
+ </div>

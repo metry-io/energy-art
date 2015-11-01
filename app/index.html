@@ -9,13 +9,16 @@
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css" />
+    <link rel='stylesheet' href='bower_components/bootstrap/dist/css/bootstrap.css' />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/custom.css">
     <!-- endbuild -->
+    <!-- fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,200,700' rel='stylesheet' type='text/css'>
+    <!-- endfonts -->
   </head>
   <body ng-app="energyArtApp">
     <!--[if lte IE 8]>
@@ -23,38 +26,9 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="header">
-      <div class="navbar navbar-default" role="navigation">
-        <div class="container">
-          <div class="navbar-header">
+    <div ui-view class="container-fluid fill"></div>
 
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-
-            <a class="navbar-brand" href="#/"></a>
-          </div>
-
-          <div class="collapse navbar-collapse" id="js-navbar-collapse" ng-controller="HeaderCtrl as header">
-
-            <ul ng-hide="{{authenticatedUser !== true}}" class="nav navbar-nav">
-              <li ng-class="{ active: header.isActive('/')}"><a href="#/">Home</a></li>
-              <li ng-class="{ active: header.isActive('/about')}"><a ng-href="#/about">About</a></li>
-              <li ng-class="{ active: header.isActive('/contact')}"><a ng-href="#/">Contact</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="container">
-    <div ng-view=""></div>
-    </div>
-
-    <div class="footer">
+    <div class="footer" ng-hide="true">
       <div class="container">
       </div>
     </div>
@@ -83,15 +57,28 @@
     <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
     <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/energimolnet-ng/dist/energimolnet.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/auth.js"></script>
-        <script src="scripts/controllers/about.js"></script>
-        <script src="scripts/controllers/header.js"></script>
-        <script src="scripts/controllers/radialchart.js"></script>
+        <script src="commons/commons.service.js"></script>
+        <script src="app.js"></script>
+        <script src="appConstatConfig.js"></script>
+        <script src="main/main.state.js"></script>
+        <script src="main/sidebar.state.js"></script>
+        <script src="main/auth.state.js"></script>
+        <script src="main/auth.js"></script>
+        <script src="main/menu.js"></script>
+        <script src="main/sidebar.directive.js"></script>
+        <script src="main/sidebar.controller.js"></script>
+        <script src="visualizers/visualizers.service.js"></script>
+        <script src="visualizers/datepicker.directive.js"></script>
+        <script src="visualizers/radial/radialchart.state.js"></script>
+        <script src="visualizers/radial/radialchart.ctrl.js"></script>
+        <script src="visualizers/heatmap/heatmap.state.js"></script>
+        <script src="visualizers/heatmap/heatmap.ctrl.js"></script>
         <!-- endbuild -->
 
 

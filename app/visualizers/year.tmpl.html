@@ -1,0 +1,6 @@
+<h2>Select year</h2>
+<div style="display:inline-block; min-height:250px;">
+      <uib-datepicker format-year="yy" min-mode="year" ng-model="dt" min-date="sidebar.first" max-date="sidebar.last" class="well well-sm" custom-class="getDayClass(date, mode)"></uib-datepicker>
+</div>
+{{sidebar.selectedVisualizer.name}}
+<a ui-sref="heatmap">GO</a>
