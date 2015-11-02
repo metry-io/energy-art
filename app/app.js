@@ -30,4 +30,4 @@ angular
 
 
 angular
-  .module('energyArtApp').constant('apiBaseUrl', 'https://app.energimolnet.se/');
+  .module('energyArtApp').constant('apiBaseUrl', 'https://app.metry.io/');
