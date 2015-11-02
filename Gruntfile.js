@@ -324,7 +324,7 @@ module.exports = function (grunt) {
           usemin: 'scripts/scripts.js'
         },
         cwd: '<%= yeoman.app %>',
-        src: './*/*.html',
+        src: '*/*.html',
         dest: '.tmp/templateCache.js'
       }
     },
