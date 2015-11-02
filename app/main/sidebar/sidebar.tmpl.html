@@ -1,15 +1,15 @@
 <div class="col-sm-3 col-md-2 sidebar">
 	<h2>Meter Info</h2>
-	<div class="meter-info center-block" ng-bind-html="sidebar.printMeterInfo()" />
+  <div class="meter-info center-block" ng-bind-html="sidebar.printMeterInfo()"></div>
 
 	<div class="form-group">
 		<label for="visualizerSel">Select Meter</label>
-		<select class="sidebar-dropdown" ng-init="selectedMeter = sidebar.meters[0]" ng-model="selectedMeter" ng-change="sidebar.selectMeter(selectedMeter)" ng-options="meter as meter.ean for meter in sidebar.meters" />
+    <select class="sidebar-dropdown" ng-init="selectedMeter = sidebar.meters[0]" ng-model="selectedMeter" ng-change="sidebar.selectMeter(selectedMeter)" ng-options="meter as meter.ean for meter in sidebar.meters"></select>
 	</div>
 
 	<div class="form-group">
 		<label for="visualizerSel">Select Visualizer</label>
-			<select class="sidebar-dropdown" ng-model="selectedVisualizer" ng-change="sidebar.selectVisualizer(selectedVisualizer)" ng-options="visualizer as visualizer.name for visualizer in sidebar.visualizers" />
+    <select class="sidebar-dropdown" ng-model="selectedVisualizer" ng-change="sidebar.selectVisualizer(selectedVisualizer)" ng-options="visualizer as visualizer.name for visualizer in sidebar.visualizers"></select>
 	</div>
 
 	<!--
