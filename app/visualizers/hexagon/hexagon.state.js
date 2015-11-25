@@ -1,12 +1,10 @@
 angular.module('energyArtApp')
   .config(function ($stateProvider){
 	$stateProvider
-	.state('radialchart', {
+	.state('hexagon', {
 	  parent: 'sidebar',
-	  url: 'radialchart',
-	  templateUrl: 'visualizers/radial/radialchart.html',
-	  controller: 'RadialchartCtrl',
-	  controllerAs: 'ctrl',
+	  url: 'hexagon',
+	  templateUrl: 'visualizers/hexagon/hexagon.html',
 	  resolve: {
 	  	data: function(dataservice, visService){
 	  		return dataservice.getMeterDayData(visService.meter);

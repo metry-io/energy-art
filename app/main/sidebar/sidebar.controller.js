@@ -1,42 +1,34 @@
 angular.module('energyArtApp')
-  .controller('sidebarCtrl', function ($state, $window, emMeters, emDateUtil, emAuth, visService){
+  .controller('sidebarCtrl', function ($scope, $state, emAuth, meters, visualizers, visService){
   	var vm = this;
-  	vm.visualizers = visService.visualizers;
-    vm.selectedVisualizer = visService.visualizer;
-    vm.first = undefined;
-    vm.last = undefined;
+  	vm.visualizers = visualizers;
+    vm.meters = meters;
+    vm.meter = meters[0];
+    visService.meter = vm.meter;
+    vm.selectedVisualizer = visualizers[0];
 
-  	emMeters.query().then(function(res){
-  		 vm.meters = res.data;
-       visService.meter = vm.meters[0];
-       vm.selectedMeter = visService.meter;
-  	});
+    console.log(vm.selectedVisualizer);
 
-    //TODO: Create gln-meter-info directive
-    vm.printMeterInfo = function(){
-      if(vm.selectedMeter != undefined){
-        return "<b>Address</b>: " +  vm.selectedMeter.address +
-                "<br><b>Ean:</b> " + vm.selectedMeter.ean;
-      }
-      }
+    //////////////////////////////////////////////////////////////////
 
     vm.selectMeter = function(meter){
-      console.log(meter);
       visService.meter = meter;
       vm.selectedMeter = visService.meter;
-      vm.first = emDateUtil.getDate(meter.consumption_stats.energy.day.first);
-      vm.last = emDateUtil.getDate(meter.consumption_stats.energy.day.last);
+      // Move to settings bar
+      //vm.first = emDateUtil.getDate(meter.consumption_stats.energy.day.first);
+      //vm.last = emDateUtil.getDate(meter.consumption_stats.energy.day.last);
     };
 
     vm.selectVisualizer = function(visualizer){
       visService.visualizer = visualizer;
       vm.selectedVisualizer = visService.visualizer;
+      vm.loadVisualizer("default");
     };
 
     vm.loadVisualizer = function(date){
-      var params = angular.copy($state.params);
-      params.ean = vm.selectedVisualizer.ean;
       visService.date = date;
+      console.log("load visualizer");
+      console.log(vm.selectedVisualizer.name);
       $state.go(vm.selectedVisualizer.name);
     };
 

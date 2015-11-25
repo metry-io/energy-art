@@ -137,9 +137,20 @@ html, body {
 }
 
 .sidebar{
-  background:#242424;
-  height:100%;
+  height: 20%;
+  width: 100%;
+}
 
+.sidebar-component{
+  padding: 10px;
+  height: 100%;
+  margin: auto;
+  width: 15%;
+  text-align: center;
+}
+
+.sidebar-component .form-group select{
+  text-align: center;
 }
 
 .meter-info{
@@ -154,6 +165,12 @@ html, body {
 .btn-sidebar-dropmenu{
   background-color: #242424;
   border:1px solid white;
+}
+
+.btn-signout{
+  position:absolute;
+  right:0;
+  top: 0;
 }
 
 .sidebar ul{
@@ -176,21 +193,27 @@ html, body {
   position:fixed;
   bottom:0;
   right:0;
-  height:100%;
+  height:80%;
+  width: 100%;
 }
 
 .radialchart svg{
-  float: left;
-  height:100%;
+  margin:auto;
+}
+
+
+path:hover{
+  stroke: white;
 }
 
 .heatmap{
-  height: 100%;
   overflow:hidden;
+  width:100%;
 }
 
 .heatmap svg{
   float:left;
+  height: 10%;
 }
 
 /*

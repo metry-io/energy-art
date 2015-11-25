@@ -1,8 +1,8 @@
 <gln-loader class="loader"></gln-loader>
-<svg class="radialchart col-md-10" viewBox="-200 0 1700 10">
+<svg class="radialchart" viewBox="-2200 0 5500 10">
 <g ng-repeat="day in ctrl.days track by $index">
   <g ng-repeat="hour in day track by $index">
-    <path ng-attr-d="{{ctrl.getPath($parent.$index,$index,500)}}" ng-style="::{stroke: ctrl.getColor(hour)}" ng-attr-stroke-width="{{ctrl.getStroke(hour)}}"/>
+    <path ng-init="{{strokeWidth=ctrl.getStroke(hour)}}" ng-attr-d="{{ctrl.getPath($parent.$index,$index,500,hour)}}" ng-style="::{stroke: ctrl.getColor(hour)}" ng-attr-stroke-width="{{strokeWidth}}" />
   </g>
 </g>
 </svg>

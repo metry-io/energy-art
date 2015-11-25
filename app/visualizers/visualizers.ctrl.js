@@ -9,42 +9,6 @@ angular.module('energyArtApp')
         vm.incrementLoader = incrementLoader;
         getMeterDayData(vm.meterId, visService.first)
 
-        //////////////////////////////////////////////////////////////////
-
-        // Get meter data
-        function getMeterDayData(meterId, startDate, endDate, granularity) {
-        	var days = [];
-            emMeters.get(vm.meterId)
-                .then(function(m) {
-                	$rootScope.$emit('startLoadingData');
-                    var hourData, startDate, endDate, period;
-
-                    hourData = m.consumption_stats.energy.hour;
-                    startDate = emDateUtil.getDate(hourData.last.toString());
-                    startDate.setDate(startDate.getDate() - 364);
-                    endDate = emDateUtil.getDate(hourData.last.toString());
-                    period = emDateUtil.getDayPeriod([startDate, endDate]);
-
-
-                    vm.meter = m;
-                    vm.maxValue = hourData.max;
-
-                    console.log(m);
-
-                    return emConsumptions.get(vm.meterId, 'hour', period);
-                })
-                .then(function(consumptions) {
-                    var data = consumptions[0].periods[0].energy;
-
-                    for (var d = 0; d < 364; d++) {
-                        vm.days.push(data.splice(0, 24));
-                    }
-
-                    $rootScope.$emit('successLoadingData');
-                    return days;
-                });
-        }
-
         function incrementLoader(){
         	vm.loader = vm.loader + 1;
         }

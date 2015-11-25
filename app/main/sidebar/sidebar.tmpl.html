@@ -1,15 +1,19 @@
-<div class="col-sm-3 col-md-2 sidebar">
-	<h2>Meter Info</h2>
-  <div class="meter-info center-block" ng-bind-html="sidebar.printMeterInfo()"></div>
+<div class="sidebar">
 
-	<div class="form-group">
-		<label for="visualizerSel">Select Meter</label>
-    <select class="sidebar-dropdown" ng-init="selectedMeter = sidebar.meters[0]" ng-model="selectedMeter" ng-change="sidebar.selectMeter(selectedMeter)" ng-options="meter as meter.ean for meter in sidebar.meters"></select>
-	</div>
+	<div class="sidebar-component">
 
-	<div class="form-group">
-		<label for="visualizerSel">Select Visualizer</label>
-    <select class="sidebar-dropdown" ng-model="selectedVisualizer" ng-change="sidebar.selectVisualizer(selectedVisualizer)" ng-options="visualizer as visualizer.name for visualizer in sidebar.visualizers"></select>
+		<div class="form-group">
+			<label for="meterSelection">Select Meter</label>
+	    <select class="form-control sidebar-dropdown" ng-init="selectedMeter = sidebar.meter" ng-model="selectedMeter" ng-change="sidebar.selectMeter(selectedMeter)" ng-options="meter as meter.ean for meter in sidebar.meters"></select>
+		</div>
+
+		<div class="form-group">
+			<label for="visualizerSel">Select Visualizer</label>
+	    <select class="form-control sidebar-dropdown" ng-init="selectedVisualizer=sidebar.selectedVisualizer"ng-model="selectedVisualizer" ng-change="sidebar.selectVisualizer(selectedVisualizer); sidebar.loadVisualizer(date)" ng-options="visualizer as visualizer.name for visualizer in sidebar.visualizers"></select>
+		</div>
+
+
+
 	</div>
 
 	<!--
@@ -18,9 +22,8 @@
 	      <uib-datepicker ng-model="date" format-year="yy" min-mode="year" ng-model="dt" min-date="sidebar.first" max-date="sidebar.last" class="well well-sm" custom-class="getDayClass(date, mode)"></uib-datepicker>
 	</div>
 	-->
-	<div class="btn-group">
-		<button class="btn btn-danger" ng-click="sidebar.logOut()">Log out</button>
-		<button class="btn btn-success" ng-click="sidebar.loadVisualizer(date)">Visualize</button>
-	</div>
+	<button class="btn btn-success" ng-click="sidebar.loadVisualizer(date)"><h4>Visualize</h4></button>
+
+	<button class="btn btn-signout btn-danger" ng-click="sidebar.logOut()">Log out</button>
 
 </div>

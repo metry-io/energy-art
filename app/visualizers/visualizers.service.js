@@ -1,8 +1,8 @@
 angular.module('visualizers', ['energimolnet'])
-  .service('visService', function () {
+  .service('visService', function ($rootScope, emMeters, emDateUtil, emConsumptions) {
     var service = this;
     service.meter = undefined;
-    service.visualizer = undefined;
+    service.meters = "meters";
     service.visualizers = [
 	    	{ 
 	    		"name": "radialchart",
@@ -12,8 +12,17 @@ angular.module('visualizers', ['energimolnet'])
 	    	{
 	    		"name": "heatmap",
 	    		"granularity": "day"
-	    	}
-    	];
+	    	},
 
+            {
+                "name": "hexagon",
+                "granularity": "day"
+            }
+    	];
+    service.visualizer = service.visualizers[0].name;
+
+    service.setMeters = function(meters){
+    	service.meters = "meters";
+    }
 
   });
