@@ -1,79 +1,98 @@
+'use strict';
+
+/**
+ * @ngdoc directive
+ * @name energyArtApp.hexagon.directive
+ * @description
+ * # hexagon.directive
+ * Factory in the energyArtApp.
+ */
+
+// NEXT TIME: Lookup how to create a function in D3 to easily create hexagons without having to create a new svg each time
+// Maybe it's enough to create a factory for the hexagonchart...?
+
 angular.module('energyArtApp')
   .directive('hexagonChart', ['d3Service',function(d3Service){
   	// Runs during compile
   	return {
-  		scope: {},
+  		scope: {
+        x: '=',
+        y: '=',
+        size: '='
+      },
   		restrict: 'E',
   		link: function(scope, ele, attr, controller) {
   			d3Service.d3().then(function(d3){
+          var size = scope.size;
   				var svg = d3.select(ele[0])
-	            .append('svg')
-	            .style('width', '100%');
+              .append("svg")
+	            .attr("width", size)
+              .attr("height", size);
+          
+          window.onresize = function() {
+              scope.$apply();
+            };
 
-	          // Browser onresize event
-	          window.onresize = function() {
-	            scope.$apply();
-	          };
+          var center = {
+            "x" : scope.x,
+            "y" : scope.y};
+          
 
-	          // hard-code data
-	          scope.data = [
-	            {name: "Greg", score: 98},
-	            {name: "Ari", score: 96},
-	            {name: 'Q', score: 75},
-	            {name: "Loser", score: 48}
-	          ];
+          var scaleX = d3.scale.linear()
+              .domain([-size, size])
+              .range([0,size]);
 
-	          // Watch for resize event
-	          scope.$watch(function() {
-	            return angular.element(window)[0].innerWidth;
-	          }, function() {
-	            scope.render(scope.data);
-	          });
+          var scaleY = d3.scale.linear()
+          .domain([-size,size])
+          .range([0,size]);
 
-	          scope.render = function(data){
-            // remove all previous items before render
+
+          function calculateHexagon(center, size){
+            var poly = [];
+
+            var angle = ((2 * Math.PI) / 6);
+            var x = 0;
+            var y = -size;
+
+            for (var i = 0; i <= 6; i++) {
+              var s = Math.sin(angle*i);
+              var c = Math.cos(angle*i);
+
+              var nx = x * c + y * s;
+              var ny = x * s + y * c;
+
+              poly.push({"x":nx,"y":ny});
+            };
+            return poly;
+          };
+
+          scope.poly = calculateHexagon(center, size);
+
+          console.log(scope.poly);
+
+          scope.$watch(function() {
+              return angular.element(window)[0].innerWidth;
+            }, function() {
+              scope.render(scope.poly);
+            });
+
+          // Watch for resize event
+          scope.$watch(function() {
+            return angular.element(window)[0].innerWidth;
+          }, function() {
+            scope.render(scope.poly);
+          });
+
+          scope.render = function(poly){
             svg.selectAll("*").remove();
 
-            // setup variables
-            var width, height, max;
-            width = d3.select(ele[0])[0][0].offsetWidth - 20;
-              // 20 is for margins and can be changed
-            height = scope.data.length * 35;
-              // 35 = 30(bar height) + 5(margin between bars)
-            max = 98;
-              // this can also be found dynamically when the data is not static
-              // max = Math.max.apply(Math, _.map(data, ((val)-> val.count)))
-
-            // set the height based on the calculations above
-            svg.attr('height', height);
-
-            //create the rectangles for the bar chart
-            svg.selectAll("rect")
-              .data(data)
-              .enter()
-                .append("rect")
-                .on("click", function(d, i){return scope.onClick({item: d});})
-                .attr("height", 30) // height of each bar
-                .attr("width", 0) // initial width of 0 for transition
-                .attr("x", 10) // half of the 20 side margin specified above
-                .attr("y", function(d, i){
-                  return i * 35;
-                }) // height + margin between bars
-                .transition()
-                  .duration(1000) // time of duration
-                  .attr("width", function(d){
-                    return d.score/(max/width);
-                  }); // width based on scale
-
-            svg.selectAll("text")
-              .data(data)
-              .enter()
-                .append("text")
-                .attr("fill", "#fff")
-                .attr("y", function(d, i){return i * 35 + 22;})
-                .attr("x", 15)
-                .text(function(d){return d[scope.label];});
-
+            svg.selectAll("polygon")
+              .data([poly])
+            .enter().append("polygon")
+              .attr("points",function(d) { 
+                  return d.map(function(d) { return [scaleX(d.x),scaleY(d.y)].join(","); }).join(" ");})
+              .attr("stroke","steelblue")
+              .attr("stroke-width",2);
           };
   			});
   		}
