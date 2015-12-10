@@ -72,8 +72,10 @@ angular.module('energyArtApp')
 
           console.log(maxBin);
           var color = d3.scale.log()
-              .domain([1, maxBin])
-              .range(["hsl(235, 100%, 5%)", "hsl(235, 100%, 95%)"]);
+              //hack to fix 0 values being ignored inside range due to logarithimic function
+              .clamp(true)
+              .domain([0.1, maxBin])
+              .range(["hsl(235, 70%, 70%)", "hsl(235, 70%, 95%)"]);
 
           var hexagonSize = scope.size;
           var hexagonWidth = hexagonSize * Math.sqrt(3);
@@ -118,16 +120,13 @@ angular.module('energyArtApp')
 
             return angular.element(window)[0].innerWidth;
           }, function() {
-            vis.attr("width", angular.element(window)[0].innerWidth / 2)
-              .attr("height", angular.element(window)[0].innerHeight / 2);
-
             scaleX = d3.scale.linear()
-              .domain([hDist, hDist * hRes - hDist])
-              .range([0, angular.element(window)[0].innerWidth / 2]);
+              .domain([0, hDist * hRes])
+              .range([0, angular.element(window)[0].innerWidth / 2 + hexagonSize]);
 
             scaleY = d3.scale.linear()
-              .domain([vDist, vDist * vRes - vDist])
-              .range([0,angular.element(window)[0].innerHeight / 2]);
+              .domain([0, vDist * vRes])
+              .range([0,angular.element(window)[0].innerHeight / 2 + hexagonSize]);
 
             scope.render(scope.hexagons);
           });
@@ -135,8 +134,38 @@ angular.module('energyArtApp')
           scope.render = function(hexagons){
             vis.selectAll("*").remove();
             xsvg.selectAll("*").remove();
+            
+            var legendOffset = 60;
+            
+            vis
+              .attr("width", angular.element(window)[0].innerWidth / 2 + legendOffset)
+              .attr("height", angular.element(window)[0].innerHeight / 2 + legendOffset);
+            
+            var wattScale = d3.scale.linear()
+              .domain([0, max])
+              .range([angular.element(window)[0].innerHeight / 2, 0]);
 
-            vis.selectAll("polygon")
+            var yAxis = d3.svg.axis()
+              .scale(wattScale)
+              .orient("left")
+              .ticks(20);
+
+            vis
+              .append("g")
+              .attr("height", "100%")
+              .attr("width", "100%")
+              .attr("transform", "translate(60,0)")
+              .call(yAxis);
+
+
+            vis
+              // we need to put everything inside an g tag since we want to translate all the hexagons
+              .append("g")
+              .attr("transform", "translate(60,0)")
+              .append("svg")
+              .attr("width", angular.element(window)[0].innerWidth / 2)
+              .attr("height", angular.element(window)[0].innerHeight / 2)
+              .selectAll("polygon")
               .data(hexagons)
               .enter().append("polygon")
                 .attr("points",function(d) {
@@ -144,9 +173,14 @@ angular.module('energyArtApp')
                       return [scaleX(h.x),scaleY(h.y)].join(","); 
                   }).join(" ");
                 })
-                .attr("stroke","midnightblue")
-                .attr("stroke-width",1)
-                .style("fill", function(d) {
+                .style("stroke", "black")
+                .on("mouseover", function() {
+                    d3.select(this).classed("hover", true);
+                  })
+                .on("mouseout", function() {
+                    d3.select(this).classed("hover", false);
+                })
+                .attr("fill", function(d) {
                   return color(d.value);
                 })
                 .append("svg:title")
@@ -154,33 +188,42 @@ angular.module('energyArtApp')
                   return d.value;
                 });
 
-            var wattScale = d3.scale.linear()
-              .domain([0, max])
-              .range([0, angular.element(window)[0].innerHeight / 2]);
-
-            var yAxis = d3.svg.axis()
-              .scale(wattScale)
-              .orient("left")
-              .ticks(20);
-
-            vis.append("g")
-              .call(yAxis);
-
             var hourScale = d3.time.scale()
-              .domain([new Date("2015-03-25T01:00:00"), new Date("2015-03-25T23:00:00")])
-              .range([0, angular.element(window)[0].innerWidth / 2 - hDist]);
+              // e.g. for 23 h span "2015-03-25T01:00:00" - "2015-03-25T24:00:00"
+              .domain([new Date("2015-03-25T01:00:00"), new Date("2015-03-25T24:00:00")])
+              .range([0, angular.element(window)[0].innerWidth / 2]);
 
             var xAxis = d3.svg.axis()
               .scale(hourScale)
               .orient("bottom")
               .ticks(d3.time.hour, 1)
-              .tickFormat(d3.time.format("%H"));
+              .tickFormat(d3.time.format("%H:%M"));
 
 
-            vis.attr("width", angular.element(window)[0].innerWidth / 2)
+            vis
               .append("g")
-              .attr("transform", "translate(" + hDist/2 + "," + angular.element(window)[0].innerHeight / 2 + ")")
+              .attr("width", angular.element(window)[0].innerWidth / 2 + 50)
+              // should be translated by the same height as the svg for the visualization
+              .attr("transform", "translate(60," + angular.element(window)[0].innerHeight / 2 + ")")
               .call(xAxis);
+              
+              var hourLabelOffset = angular.element(window)[0].innerHeight / 2 + 45;
+              
+              vis.append("text")
+                .attr("text-anchor", "middle")
+                .attr("font-size", "36px")
+                .attr("font-weight", "800")
+                .attr("transform", "translate(" + angular.element(window)[0].innerWidth / 2 + "," + hourLabelOffset+ ")")
+                .text("Hour");
+              
+              var kWhLabelOffset = angular.element(window)[0].innerHeight / 2 - 20;
+              
+              vis.append("text")
+                .attr("text-anchor", "middle")
+                .attr("font-size", "36px")
+                .attr("font-weight", "800")
+                .attr("transform", "translate(30 , " + kWhLabelOffset+ ")rotate(-90)")
+                .text("kWh");
         };
         });
         })

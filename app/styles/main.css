@@ -194,6 +194,15 @@ svg{
   margin: auto;
 }
 
+polygon{
+  transition: fill 1s linear 0s;
+}
+
+polygon:hover{
+  fill: #E8C954;
+  transition: fill 0.05s linear 0s;
+}
+
 .radialchart{
   position:fixed;
   bottom:0;
