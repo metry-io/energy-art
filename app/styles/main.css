@@ -137,8 +137,8 @@ html, body {
 }
 
 .sidebar{
-  height: 20%;
-  width: 100%;
+  height: 15%;
+  margin-bottom: 100px;
 }
 
 .sidebar-component{
@@ -187,6 +187,11 @@ html, body {
   position: absolute;
   bottom: 0;
   margin: 40px;
+}
+
+svg{
+  display:block;
+  margin: auto;
 }
 
 .radialchart{

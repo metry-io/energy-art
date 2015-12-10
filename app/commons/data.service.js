@@ -19,13 +19,11 @@ angular.module('commons', ['energimolnet'])
 		return meters;
 	}
 
-    // Get meter day data
     function getMeterDayData(meter) {
     	var days = [];
-
     	var meterId = meter._id;
-    	console.log(meterId);
-	    emMeters.get(meterId)
+
+    	return emMeters.get(meterId)
 	            .then(function(m) {
 	                var hourData, startDate, endDate, period;
 
@@ -46,10 +44,9 @@ angular.module('commons', ['energimolnet'])
 	                }
 
 	                $rootScope.$emit('successLoadingData');
+
 	                return days;
 	            });
-
-	    return days;
     }
 
     function getMaxHourValue(meter){
@@ -57,6 +54,14 @@ angular.module('commons', ['energimolnet'])
     	return emMeters.get(meterId)
 	    		.then(function(m){
 	    			return m.consumption_stats.energy.hour.max;
+	    		});
+    }
+
+    function getMinHourValue(meter){
+    	var meterId = meter._id;
+    	return emMeters.get(meterId)
+	    		.then(function(m){
+	    			return m.consumption_stats.energy.hour.min;
 	    		});
     }
 

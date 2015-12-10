@@ -12,7 +12,6 @@ angular.module('energyArtApp')
     var vm = this;
     vm.days = data;
     vm.maxValue = maxValue;
-
     vm.getColor = getColor;
 
     //////////////////////////////////////////////////////////////////

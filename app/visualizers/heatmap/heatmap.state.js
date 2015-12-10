@@ -11,7 +11,6 @@ angular.module('energyArtApp')
 	  		return dataservice.getMeterDayData(visService.meter);
 	  	},
 	  	maxValue: function(dataservice, visService){
-	  		console.log(visService.meter);
 	  		return dataservice.getMaxHourValue(visService.meter);
 	  	}
 	  }
