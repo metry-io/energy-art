@@ -30,6 +30,7 @@ angular.module('energyArtApp')
         scope.$watch('days', function(days){
           d3Service.d3().then(function(d3){
 
+          // Find the max consumption value
           var max = d3.max(days, function(d) { 
             return d3.max(d, function(value){ 
               return value; 
@@ -41,6 +42,7 @@ angular.module('energyArtApp')
           var hRes = 24,
               vRes = 20;
 
+          //Creata an empty bin array
           var binData = new Array(hRes);
           for (var hour = 0; hour < hRes; hour++) {
             binData[hour] = new Array(vRes);
@@ -59,6 +61,7 @@ angular.module('energyArtApp')
             .range(bins);
 
           var maxBin = 0;
+          
 
           // Increment the bin value where the current consumption value maps to
           days.forEach(function(data){
@@ -94,12 +97,20 @@ angular.module('energyArtApp')
 
           scope.hexagons = calcHexagons(hexagonSize, hRes, vRes);
 
+           console.log(max);
+          
+          var ws = d3.scale.linear()
+              .domain([0, 19])
+              .range([0, max]);
+
+         
           scope.hexagons.forEach(function(hexagon, index){
             var row = Math.floor(index/24);
             var col = index % 24;
 
             console.log(row);
             hexagon.value = binData[col][row];
+            hexagon.consumption = ws(19 - row);
           });
 
           var scaleX = d3.scale.linear()
@@ -135,7 +146,7 @@ angular.module('energyArtApp')
             vis.selectAll("*").remove();
             xsvg.selectAll("*").remove();
             
-            var legendOffset = 60;
+            var legendOffset = 100;
             
             vis
               .attr("width", angular.element(window)[0].innerWidth / 2 + legendOffset)
@@ -154,6 +165,7 @@ angular.module('energyArtApp')
               .append("g")
               .attr("height", "100%")
               .attr("width", "100%")
+              .attr("fill", "#A4A4A4")
               .attr("transform", "translate(60,0)")
               .call(yAxis);
 
@@ -173,9 +185,9 @@ angular.module('energyArtApp')
                       return [scaleX(h.x),scaleY(h.y)].join(","); 
                   }).join(" ");
                 })
-                .style("stroke", "black")
                 .on("mouseover", function() {
                     d3.select(this).classed("hover", true);
+                    d3.select(this.parentNode.appendChild(this).transition().duration(300).style({'stroke-opacity': 1, 'stroke': '#F00'}));
                   })
                 .on("mouseout", function() {
                     d3.select(this).classed("hover", false);
@@ -185,7 +197,7 @@ angular.module('energyArtApp')
                 })
                 .append("svg:title")
                 .text(function(d){
-                  return d.value;
+                  return d.value + " occurances which around " + Math.round(d.consumption * 100) + " Wh in consumption";
                 });
 
             var hourScale = d3.time.scale()
@@ -204,6 +216,7 @@ angular.module('energyArtApp')
               .append("g")
               .attr("width", angular.element(window)[0].innerWidth / 2 + 50)
               // should be translated by the same height as the svg for the visualization
+              .attr("fill", "#A4A4A4")
               .attr("transform", "translate(60," + angular.element(window)[0].innerHeight / 2 + ")")
               .call(xAxis);
               
@@ -213,6 +226,7 @@ angular.module('energyArtApp')
                 .attr("text-anchor", "middle")
                 .attr("font-size", "36px")
                 .attr("font-weight", "800")
+                .attr("fill", "#A4A4A4")
                 .attr("transform", "translate(" + angular.element(window)[0].innerWidth / 2 + "," + hourLabelOffset+ ")")
                 .text("Hour");
               
@@ -222,6 +236,7 @@ angular.module('energyArtApp')
                 .attr("text-anchor", "middle")
                 .attr("font-size", "36px")
                 .attr("font-weight", "800")
+                .attr("fill", "#A4A4A4")
                 .attr("transform", "translate(30 , " + kWhLabelOffset+ ")rotate(-90)")
                 .text("kWh");
         };
