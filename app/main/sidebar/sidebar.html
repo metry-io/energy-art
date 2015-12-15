@@ -3,14 +3,27 @@
 	<div class="sidebar-component">
 
 		<div class="form-group">
-			<label for="visualizerSel">Select Meter</label>
-	    <select class="form-control sidebar-dropdown" ng-init="selectedMeter = sidebar.meter" ng-model="selectedMeter" ng-change="sidebar.selectMeter(selectedMeter)" ng-options="meter as meter.ean for meter in sidebar.meters"></select>
+			<label for="meter">Select Meter</label>
+	    <select
+        id="meter"
+        class="form-control sidebar-dropdown"
+        ng-init="selectedMeter = sidebar.meter"
+        ng-model="selectedMeter"
+        ng-change="sidebar.selectMeter(selectedMeter)"
+        ng-options="meter as meter.ean for meter in sidebar.meters"></select>
 		</div>
 
 		<div class="form-group">
-			<label for="visualizerSel">Select Visualizer</label>
-	    <select class="form-control sidebar-dropdown" ng-init="selectedVisualizer=sidebar.selectedVisualizer"ng-model="selectedVisualizer" ng-change="sidebar.selectVisualizer(selectedVisualizer)" ng-options="visualizer as visualizer.name for visualizer in sidebar.visualizers"></select>
+			<label for="visualizer">Select Visualizer</label>
+	    <select
+        id="visualizer"
+        class="form-control sidebar-dropdown"
+        ng-init="selectedVisualizer=sidebar.selectedVisualizer"
+        ng-model="selectedVisualizer"
+        ng-change="sidebar.selectVisualizer(selectedVisualizer)"
+        ng-options="visualizer as visualizer.name for visualizer in sidebar.visualizers"></select>
 		</div>
+
 
 	</div>
 
@@ -19,7 +32,7 @@
 	<div style="display:inline-block; min-height:250px;">
 	      <uib-datepicker ng-model="date" format-year="yy" min-mode="year" ng-model="dt" min-date="sidebar.first" max-date="sidebar.last" class="well well-sm" custom-class="getDayClass(date, mode)"></uib-datepicker>
 	</div>
-	
+
 	<button class="btn btn-success" ng-click="sidebar.loadVisualizer(date)"><h4>Visualize</h4></button>
 	-->
 
@@ -27,4 +40,5 @@
 
 </div>
 
-<ui-view></ui-view>
+<gln-loader class="loader"></gln-loader>
+<ui-view ng-show="!isStateLoading"></ui-view>

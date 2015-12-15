@@ -23,6 +23,7 @@ angular.module('commons', ['energimolnet'])
     	var days = [];
     	var meterId = meter._id;
 
+      $rootScope.$emit('startLoadingData');
     	return emMeters.get(meterId)
 	            .then(function(m) {
 	                var hourData, startDate, endDate, period;

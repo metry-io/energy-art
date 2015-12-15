@@ -6,11 +6,11 @@ angular.module('energyArtApp')
 			link: function(scope, elem, attr) {
 				scope.isStateLoading = false;
 
-				$rootScope.$on('startLoadingData', function(){
+				$rootScope.$on('$stateChangeStart', function(){
 					console.log('change loading state');
 					scope.isStateLoading = true;
 				});
-				$rootScope.$on('successLoadingData', function(){
+				$rootScope.$on('$stateChangeSuccess', function(){
 					scope.isStateLoading = false;
 				});
 			}
