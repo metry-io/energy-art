@@ -27,7 +27,7 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div ui-view class="container-fluid fill"></div>
+    <div ui-view id="ui-view" class="container-fluid fill"></div>
 
     <div class="footer" ng-hide="true">
       <div class="container">
@@ -61,11 +61,14 @@
     <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/angular-spinkit/build/angular-spinkit.js"></script>
+    <script src="bower_components/d3/d3.js"></script>
+    <script src="bower_components/topojson/topojson.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
         <script src="commons/commons.service.js"></script>
+        <script src="commons/data.service.js"></script>
 
         <script src="app.js"></script>
         <script src="appConstatConfig.js"></script>
@@ -89,6 +92,14 @@
 
         <script src="visualizers/heatmap/heatmap.state.js"></script>
         <script src="visualizers/heatmap/heatmap.ctrl.js"></script>
+
+        <script src="visualizers/hexagon/hexagon.state.js"></script>
+        <script src="visualizers/hexagon/hexagon.directive.js"></script>
+
+        <script src="visualizers/geomap/geomap.state.js"></script>
+        <script src="visualizers/geomap/geomap.directive.js"></script>
+
+        <script src="scripts/services/d3service.js"></script>
         <!-- endbuild -->
 
 

@@ -35,9 +35,11 @@ module.exports = function(config) {
       'bower_components/angular-ui-router/release/angular-ui-router.js',
       'bower_components/angular-bootstrap/ui-bootstrap-tpls.js',
       'bower_components/angular-spinkit/build/angular-spinkit.js',
+      'bower_components/d3/d3.js',
+      'bower_components/topojson/topojson.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
-      "app/scripts/**/*.js",
+      "app/**/*.js",
       "test/mock/**/*.js",
       "test/spec/**/*.js"
     ],

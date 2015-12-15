@@ -10,7 +10,7 @@
 
 
 angular.module('energyArtApp')
-  .controller('AuthCtrl', function ($window, $location, $rootScope, emAuth, commonsService) {
+  .controller('AuthCtrl', function ($window, $location, $rootScope, emAuth) {
 	var vm = this;
 
     vm.redirect = function(){

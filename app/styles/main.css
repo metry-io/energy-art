@@ -137,9 +137,20 @@ html, body {
 }
 
 .sidebar{
-  background:#242424;
-  height:100%;
+  height: 15%;
+  margin-bottom: 100px;
+}
 
+.sidebar-component{
+  padding: 10px;
+  height: 100%;
+  margin: auto;
+  width: 15%;
+  text-align: center;
+}
+
+.sidebar-component .form-group select{
+  text-align: center;
 }
 
 .meter-info{
@@ -154,6 +165,12 @@ html, body {
 .btn-sidebar-dropmenu{
   background-color: #242424;
   border:1px solid white;
+}
+
+.btn-signout{
+  position:absolute;
+  right:0;
+  top: 0;
 }
 
 .sidebar ul{
@@ -172,47 +189,59 @@ html, body {
   margin: 40px;
 }
 
+svg{
+  display:block;
+  margin: auto;
+}
+
+polygon{
+  stroke: #A4A4A4;
+
+  transition: stroke 0.05s linear 0s;
+  transition: stroke-width 0.05s ease-in-out 0s;
+  transition: fill 0.5s linear 0s;
+}
+
+polygon:hover{
+  stroke: white;
+  stroke-width: 5px;
+  fill: #E8C954;
+
+  transition: stroke 0.05s linear 0s;
+  transition: stroke-width 0.05s ease-in-out 0s;
+  transition: fill 0.05s linear 0s;
+}
+
 .radialchart{
   position:fixed;
   bottom:0;
   right:0;
-  height:100%;
+  height:80%;
+  width: 100%;
 }
 
 .radialchart svg{
-  float: left;
-  height:100%;
+  margin:auto;
+}
+
+
+path:hover{
+  stroke: white;
 }
 
 .heatmap{
-  height: 100%;
   overflow:hidden;
+  width:100%;
 }
 
 .heatmap svg{
   float:left;
+  height: 10%;
 }
 
-/*
-  Hack on spinkit to force the loader to be in the center of the div
-*/
-.loading-indicator{
-  position:relative;
-  margin: 0 auto;
-  height:100%;
-}
-
-.wave-spinner{
-  margin:auto;
-}
-
-.spinner{
-  position: relative;
-  top:50%;
-  margin: 0 auto;
-  -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
+.bubble{
+  fill: steelblue;
+  fill-opacity: 0.1;
 }
 
 /*

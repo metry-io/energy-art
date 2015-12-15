@@ -5,7 +5,15 @@ angular.module('energyArtApp')
 	  parent: 'sidebar',
 	  url: 'radialchart',
 	  templateUrl: 'visualizers/radial/radialchart.html',
-	  controller: 'visualizerCtrl',
-	  controllerAs: 'ctrl'
+	  controller: 'RadialchartCtrl',
+	  controllerAs: 'ctrl',
+	  resolve: {
+	  	data: function(dataservice, visService){
+	  		return dataservice.getMeterDayData(visService.meter);
+	  	},
+	  	maxValue: function(dataservice, visService){
+	  		return dataservice.getMaxHourValue(visService.meter);
+	  	}
+	  }
   })
 });
