@@ -21,6 +21,9 @@ angular.module('energyArtApp')
           scope.days = d;
         });
 
+        dataservice.addCounty(visService.meter.address);
+        console.log(dataservice.getCounty(visService.meter.address));
+
         scope.$watch('days', function(days){
 
           d3Service.d3().then(function(d3){
@@ -48,7 +51,6 @@ angular.module('energyArtApp')
                 s = .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height),
                 t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) / 2];
 
-              console.log(s + " " + t);
               projection.scale(s).translate(t);
 
               window.onresize = function() {
@@ -67,6 +69,7 @@ angular.module('energyArtApp')
 
 
             scope.render = function(map){
+
               d3.select(ele[0]).selectAll("svg").remove();
               var vis = d3.select(ele[0]).append("svg")
                 .attr("width", width)
@@ -77,8 +80,6 @@ angular.module('energyArtApp')
                 .enter().append('path')
                 .attr('class', function(d) { return 'munic munic--' + d.properties.KNKOD; })
                 .attr('d', d3.geo.path().projection(projection));
-
-              console.log(map.subunits.features);
 
               vis.append("g")
                 .attr("class", "bubble")

@@ -1,15 +1,19 @@
 angular.module('commons', ['energimolnet'])
-  .factory('dataservice', function ($rootScope, emMeters, emDateUtil, emConsumptions) {
+  .factory('dataservice', function ($rootScope, $localStorage, emMeters, emDateUtil, emConsumptions) {
 
   	var service = {
   		getMeterDayData: getMeterDayData,
   		getMaxHourValue: getMaxHourValue,
-  		getMeters: getMeters
+  		getMeters: getMeters,
+      addCounty: addCounty,
+      getCounty: getCounty
   	};
 
-  	return service;
+    service.counties = [];
 
-	//////////////////////////////////////////////////////////////////
+    return service;
+
+    //////////////////////////////////////////////////////////////////
 
 	function getMeters() {
 		var meters = emMeters.query().then(function(res){
@@ -64,6 +68,21 @@ angular.module('commons', ['energimolnet'])
 	    		.then(function(m){
 	    			return m.consumption_stats.energy.hour.min;
 	    		});
+    }
+
+    //NEXT: Find a way to store already retrieved data to minimize the number of calls to the google geocoder API
+    function addCounty(address){
+      var geocoder = new google.maps.Geocoder();
+
+      geocoder.geocode( { "address": address }, function(results, status) {
+        alert(results[0].address_components[2].short_name);
+        service.counties.push(results[0].address_components[2].short_name);
+
+      });
+    }
+
+    function getCounty(address){
+      return service.counties;
     }
 
   });
