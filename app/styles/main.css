@@ -196,7 +196,7 @@ svg{
 
 polygon{
   stroke: #A4A4A4;
-  
+
   transition: stroke 0.05s linear 0s;
   transition: stroke-width 0.05s ease-in-out 0s;
   transition: fill 0.5s linear 0s;
@@ -206,7 +206,7 @@ polygon:hover{
   stroke: white;
   stroke-width: 5px;
   fill: #E8C954;
-  
+
   transition: stroke 0.05s linear 0s;
   transition: stroke-width 0.05s ease-in-out 0s;
   transition: fill 0.05s linear 0s;
@@ -239,26 +239,9 @@ path:hover{
   height: 10%;
 }
 
-/*
-  Hack on spinkit to force the loader to be in the center of the div
-*/
-.loading-indicator{
-  position:relative;
-  margin: 0 auto;
-  height:100%;
-}
-
-.wave-spinner{
-  margin:auto;
-}
-
-.spinner{
-  position: relative;
-  top:50%;
-  margin: 0 auto;
-  -webkit-transform: translateY(-50%);
-  -ms-transform: translateY(-50%);
-  transform: translateY(-50%);
+.bubble{
+  fill: steelblue;
+  fill-opacity: 0.1;
 }
 
 /*

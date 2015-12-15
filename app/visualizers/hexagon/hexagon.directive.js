@@ -8,9 +8,6 @@
  * Factory in the energyArtApp.
  */
 
-// NEXT TIME: Lookup how to create a function in D3 to easily create hexagons without having to create a new svg each time
-// Maybe it's enough to create a factory for the hexagonchart...?
-
 angular.module('energyArtApp')
   .directive('hexagonChart', ['d3Service', 'dataservice', 'visService', function(d3Service, dataservice, visService){
   	// Runs during compile
@@ -21,19 +18,20 @@ angular.module('energyArtApp')
         size: '='
       },
   		restrict: 'E',
-  		link: function(scope, ele, attr, controller) {
+  		link: function(scope, ele) {
 
         dataservice.getMeterDayData(visService.meter).then(function(d){
           scope.days = d;
         });
 
         scope.$watch('days', function(days){
+
           d3Service.d3().then(function(d3){
 
           // Find the max consumption value
-          var max = d3.max(days, function(d) { 
-            return d3.max(d, function(value){ 
-              return value; 
+          var max = d3.max(days, function(d) {
+            return d3.max(d, function(value){
+              return value;
             })
           });
 
@@ -42,7 +40,7 @@ angular.module('energyArtApp')
           var hRes = 24,
               vRes = 20;
 
-          //Creata an empty bin array
+          // Create an empty bin array
           var binData = new Array(hRes);
           for (var hour = 0; hour < hRes; hour++) {
             binData[hour] = new Array(vRes);
@@ -61,7 +59,7 @@ angular.module('energyArtApp')
             .range(bins);
 
           var maxBin = 0;
-          
+
 
           // Increment the bin value where the current consumption value maps to
           days.forEach(function(data){
@@ -73,9 +71,8 @@ angular.module('energyArtApp')
             });
           });
 
-          console.log(maxBin);
           var color = d3.scale.log()
-              //hack to fix 0 values being ignored inside range due to logarithimic function
+              //hack to fix 0 values being ignored inside range due to log function
               .clamp(true)
               .domain([0.1, maxBin])
               .range(["hsl(235, 70%, 70%)", "hsl(235, 70%, 95%)"]);
@@ -93,22 +90,19 @@ angular.module('energyArtApp')
 
           var xsvg = d3.select(ele[0])
                   .append("svg");
-          
+
 
           scope.hexagons = calcHexagons(hexagonSize, hRes, vRes);
 
-           console.log(max);
-          
           var ws = d3.scale.linear()
               .domain([0, 19])
               .range([0, max]);
 
-         
+          // Bind data to each hexagon
           scope.hexagons.forEach(function(hexagon, index){
             var row = Math.floor(index/24);
             var col = index % 24;
 
-            console.log(row);
             hexagon.value = binData[col][row];
             hexagon.consumption = ws(19 - row);
           });
@@ -127,10 +121,10 @@ angular.module('energyArtApp')
 
           // Watch for resize event
           scope.$watch(function() {
-            console.log(angular.element(window)[0].innerWidth);
-
             return angular.element(window)[0].innerWidth;
+
           }, function() {
+            //TODO: take into account the ratio difference for a "normal" screen resolution
             scaleX = d3.scale.linear()
               .domain([0, hDist * hRes])
               .range([0, angular.element(window)[0].innerWidth / 2 + hexagonSize]);
@@ -145,13 +139,12 @@ angular.module('energyArtApp')
           scope.render = function(hexagons){
             vis.selectAll("*").remove();
             xsvg.selectAll("*").remove();
-            
+
             var legendOffset = 100;
-            
-            vis
-              .attr("width", angular.element(window)[0].innerWidth / 2 + legendOffset)
+
+            vis.attr("width", angular.element(window)[0].innerWidth / 2 + legendOffset)
               .attr("height", angular.element(window)[0].innerHeight / 2 + legendOffset);
-            
+
             var wattScale = d3.scale.linear()
               .domain([0, max])
               .range([angular.element(window)[0].innerHeight / 2, 0]);
@@ -161,18 +154,15 @@ angular.module('energyArtApp')
               .orient("left")
               .ticks(20);
 
-            vis
-              .append("g")
+            vis.append("g")
               .attr("height", "100%")
               .attr("width", "100%")
               .attr("fill", "#A4A4A4")
               .attr("transform", "translate(60,0)")
               .call(yAxis);
 
-
-            vis
-              // we need to put everything inside an g tag since we want to translate all the hexagons
-              .append("g")
+            // we need to put everything inside an g tag since we want to translate all the hexagons
+            vis.append("g")
               .attr("transform", "translate(60,0)")
               .append("svg")
               .attr("width", angular.element(window)[0].innerWidth / 2)
@@ -182,12 +172,12 @@ angular.module('energyArtApp')
               .enter().append("polygon")
                 .attr("points",function(d) {
                     return d.hexagon.shape.map(function(h) {
-                      return [scaleX(h.x),scaleY(h.y)].join(","); 
+                      return [scaleX(h.x),scaleY(h.y)].join(",");
                   }).join(" ");
                 })
                 .on("mouseover", function() {
                     d3.select(this).classed("hover", true);
-                    d3.select(this.parentNode.appendChild(this).transition().duration(300).style({'stroke-opacity': 1, 'stroke': '#F00'}));
+                    d3.select(this.parentNode.appendChild(this)).transition(3000);
                   })
                 .on("mouseout", function() {
                     d3.select(this).classed("hover", false);
@@ -197,7 +187,7 @@ angular.module('energyArtApp')
                 })
                 .append("svg:title")
                 .text(function(d){
-                  return d.value + " occurances which around " + Math.round(d.consumption * 100) + " Wh in consumption";
+                  return d.value + " occurances around " + Math.round(d.consumption * 100) + " Wh in consumption";
                 });
 
             var hourScale = d3.time.scale()
@@ -212,16 +202,17 @@ angular.module('energyArtApp')
               .tickFormat(d3.time.format("%H:%M"));
 
 
-            vis
-              .append("g")
+            vis.append("g")
               .attr("width", angular.element(window)[0].innerWidth / 2 + 50)
               // should be translated by the same height as the svg for the visualization
               .attr("fill", "#A4A4A4")
               .attr("transform", "translate(60," + angular.element(window)[0].innerHeight / 2 + ")")
-              .call(xAxis);
-              
-              var hourLabelOffset = angular.element(window)[0].innerHeight / 2 + 45;
-              
+              .call(xAxis)
+              .selectAll("text")
+              .attr("transform", "translate(30,20)rotate(45)");;
+
+              var hourLabelOffset = angular.element(window)[0].innerHeight / 2 + 70;
+
               vis.append("text")
                 .attr("text-anchor", "middle")
                 .attr("font-size", "36px")
@@ -229,9 +220,9 @@ angular.module('energyArtApp')
                 .attr("fill", "#A4A4A4")
                 .attr("transform", "translate(" + angular.element(window)[0].innerWidth / 2 + "," + hourLabelOffset+ ")")
                 .text("Hour");
-              
+
               var kWhLabelOffset = angular.element(window)[0].innerHeight / 2 - 20;
-              
+
               vis.append("text")
                 .attr("text-anchor", "middle")
                 .attr("font-size", "36px")
@@ -253,7 +244,7 @@ function calcHexagons(size, hRes, vRes){
     for (var col = 0; col < hRes; col++) {
       var center = {
         "x" :  Math.sqrt(3) * size * col + Math.sqrt(3) * size / 2 * (row%2),
-        "y" : size * 2  * 3/4 * row 
+        "y" : size * 2  * 3/4 * row
       };
       var hexagon = calcHexagon(center, size);
 

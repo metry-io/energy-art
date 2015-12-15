@@ -4,7 +4,7 @@ angular.module('visualizers', ['energimolnet'])
     service.meter = undefined;
     service.meters = "meters";
     service.visualizers = [
-	    	{ 
+	    	{
 	    		"name": "radialchart",
 	    		"granularity": "year"
 	    	},
@@ -14,10 +14,15 @@ angular.module('visualizers', ['energimolnet'])
 	    		"granularity": "day"
 	    	},
 
-            {
-                "name": "hexagon",
-                "granularity": "day"
-            }
+        {
+            "name": "hexagon",
+            "granularity": "day"
+        },
+
+      {
+        "name": "geomap",
+        "granularity": ["day", "month", "year"]
+      }
     	];
     service.visualizer = service.visualizers[0].name;
 
