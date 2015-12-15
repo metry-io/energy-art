@@ -3,7 +3,10 @@
 angular
   .module('energyArtApp')
     .constant('authConfig', {
-      privateToken: 'f3f9c546c514cc99c8da36d0468d1c22d83b7822dc133f6984cc44a46a94'
+       disabled: false,
+       clientId: 'energy_art',
+       clientSecret: 'jg09zs8f43hlrgr8thhieiwsf8hhsg89389ssh',
+       redirectUri: 'http://energy-art.se'
     });
 
 
