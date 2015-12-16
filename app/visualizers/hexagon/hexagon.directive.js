@@ -138,7 +138,6 @@ angular.module('energyArtApp')
 
           scope.render = function(hexagons){
             vis.selectAll("*").remove();
-            xsvg.selectAll("*").remove();
 
             var legendOffset = 100;
 

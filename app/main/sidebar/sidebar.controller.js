@@ -27,8 +27,6 @@ angular.module('energyArtApp')
 
     vm.loadVisualizer = function(date){
       visService.date = date;
-      console.log("load visualizer");
-      console.log(vm.selectedVisualizer.name);
       $state.go(vm.selectedVisualizer.name);
     };
 
