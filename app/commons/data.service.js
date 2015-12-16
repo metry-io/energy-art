@@ -6,7 +6,8 @@ angular.module('commons', ['energimolnet'])
       getMaxHourValue: getMaxHourValue,
       getMeters: getMeters,
       addCounty: addCounty,
-      getCounty: getCounty
+      getCounty: getCounty,
+      dateDiffInDays: dateDiffInDays
     };
 
     service.counties = [];
@@ -23,32 +24,18 @@ angular.module('commons', ['energimolnet'])
       return meters;
     }
 
-    function getMeterDayData(meter) {
+    function getMeterDayData(meter, startDate, endDate) {
       var days = [];
       var meterId = meter._id;
+      var period = emDateUtil.getDayPeriod([startDate, endDate]);
 
-      $rootScope.$emit('startLoadingData');
-      return emMeters.get(meterId)
-        .then(function (m) {
-          var hourData, startDate, endDate, period;
-
-          hourData = m.consumption_stats.energy.hour;
-          startDate = emDateUtil.getDate(hourData.last.toString());
-          startDate.setDate(startDate.getDate() - 364);
-          endDate = emDateUtil.getDate(hourData.last.toString());
-          period = emDateUtil.getDayPeriod([startDate, endDate]);
-
-
-          return emConsumptions.get(meterId, 'hour', period);
-        })
+      return emConsumptions.get(meterId, 'hour', period)
         .then(function (consumptions) {
           var data = consumptions[0].periods[0].energy;
 
           for (var d = 0; d < 364; d++) {
             days.push(data.splice(0, 24));
           }
-
-          $rootScope.$emit('successLoadingData');
 
           return days;
         });
@@ -84,5 +71,7 @@ angular.module('commons', ['energimolnet'])
     function getCounty(address) {
       return service.counties;
     }
+
+
 
   });

@@ -1,11 +1,1 @@
-<!--
-<svg class="radialchart" viewBox="-2200 0 5500 10">
-<g ng-repeat="day in ctrl.days track by $index">
-  <g ng-repeat="hour in day track by $index">
-    <path ng-init="{{strokeWidth=ctrl.getStroke(hour)}}" ng-attr-d="{{ctrl.getPath($parent.$index,$index,500,hour)}}" ng-style="::{stroke: ctrl.getColor(hour)}" ng-attr-stroke-width="{{strokeWidth}}" />
-  </g>
-</g>
-</svg>
--->
-
-<radial-chart></radial-chart>
+<radial-chart start-date="2015-01-01" end-date="2015-08-01"></radial-chart>

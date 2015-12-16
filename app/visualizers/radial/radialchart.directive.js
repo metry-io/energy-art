@@ -12,25 +12,31 @@ angular.module('energyArtApp')
   .directive('radialChart', ['d3Service', 'dataservice', 'visService', function (d3Service, dataservice, visService) {
     // Runs during compile
     return {
+      scope: {
+        startDate: '=',
+        endDate: '='
+      },
       restrict: 'E',
-      link: function (scope, ele) {
+      link: function (scope, ele, attr) {
 
-        dataservice.getMeterDayData(visService.meter).then(function (d) {
+        var startDate = new Date(attr.startDate),
+            endDate = new Date(attr.endDate);
+
+        var numDays = dateDiffInDays(startDate, endDate);
+
+        dataservice.getMeterDayData(visService.meter, startDate, endDate).then(function (d) {
           scope.days = d;
         });
 
+
         dataservice.getMaxHourValue(visService.meter).then(function(d) {
           scope.max = d;
-          console.log(scope.max);
         });
 
-        console.log("Running radial chart directive");
 
         scope.$watch('days', function (days) {
 
           d3Service.d3().then(function (d3) {
-
-            console.log("Running radial chart directive");
 
             var width = angular.element(window)[0].innerWidth,
               height = angular.element(window)[0].innerHeight * 0.70;
@@ -70,8 +76,8 @@ angular.module('energyArtApp')
                 data.forEach(function (value, hour) {
                   var ir = hour * scope.max,
                     or = (ir + value),
-                    sa = 2 * Math.PI * ((day - 1) / 364),
-                    ea = 2 * Math.PI * (day / 364),
+                    sa = 2 * Math.PI * ((day - 1) / numDays),
+                    ea = 2 * Math.PI * (day / numDays),
                     scale = 5;
 
                   arc.innerRadius(ir * scale)
@@ -82,7 +88,28 @@ angular.module('energyArtApp')
                   vis.append("path")
                     .attr("d", arc)
                     .attr("fill", color(value))
-                    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")");
+                    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+                    .append("title")
+                    .text(function(){
+                      return value + " kWh";
+                    });
+
+
+                  vis.append("text")
+                    .attr("text-anchor", "middle")
+                    .attr("font-size", "36px")
+                    .attr("font-weight", "800")
+                    .attr("fill", "#A4A4A4")
+                    .attr("transform", "translate(500 , 40)")
+                    .text(startDate.toDateString());
+
+                  vis.append("text")
+                    .attr("text-anchor", "middle")
+                    .attr("font-size", "36px")
+                    .attr("font-weight", "800")
+                    .attr("fill", "#A4A4A4")
+                    .attr("transform", "translate(1300 , 40)")
+                    .text(endDate.toDateString());
                 })
               });
             };
@@ -92,21 +119,14 @@ angular.module('energyArtApp')
     };
   }]);
 
+var _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
-function getPath(day, hour, radius, hourValue) {
-  var r;
-  var max = vm.maxValue || 100;
+// a and b are javascript Date objects
+function dateDiffInDays(a, b) {
+  // Discard the time and time-zone information.
+  var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+  var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
 
-  var offset = 5;
-  var strokeOffset = ((hourValue / max) * 50) / 2;
-  var hourOffset = (radius * (hour / 24));
-  var prevMaxHeight = (max * 50 + radius * ((hour - 1) / 24)) || 0;
-  r = hourOffset + strokeOffset + prevMaxHeight + offset;
-
-  var ax = radius + (r * Math.cos(2 * Math.PI * ((day - 1) / 365)))
-  var ay = (r * Math.sin(2 * Math.PI * ((day - 1) / 365)))
-  var bx = radius + (r * Math.cos(2 * Math.PI * (day / 365)))
-  var by = (r * Math.sin(2 * Math.PI * (day / 365)))
-
-  return 'M' + ax + ',' + ay + ' A' + radius + ',' + radius + ' 0 0,0 ' + bx + ',' + by
+  return Math.floor((utc2 - utc1) / _MS_PER_DAY);
 }
+

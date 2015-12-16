@@ -15,12 +15,17 @@ angular.module('energyArtApp')
   		scope: {
         x: '=',
         y: '=',
-        size: '='
+        size: '=',
+        startDate: '=',
+        endDate: '='
       },
   		restrict: 'E',
-  		link: function(scope, ele) {
+  		link: function(scope, ele, attr) {
 
-        dataservice.getMeterDayData(visService.meter).then(function(d){
+        var startDate = new Date(attr.startDate),
+          endDate = new Date(attr.endDate);
+
+        dataservice.getMeterDayData(visService.meter, startDate, endDate).then(function(d){
           scope.days = d;
         });
 

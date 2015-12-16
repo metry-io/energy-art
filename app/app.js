@@ -27,7 +27,6 @@ angular
   ])
   .config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/');
-    console.log("going to main");
   });
 
 

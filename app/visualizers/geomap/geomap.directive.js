@@ -22,7 +22,6 @@ angular.module('energyArtApp')
         });
 
         dataservice.addCounty(visService.meter.address);
-        console.log(dataservice.getCounty(visService.meter.address));
 
         scope.$watch('days', function(days){
 

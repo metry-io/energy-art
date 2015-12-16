@@ -7,7 +7,6 @@ angular.module('energyArtApp')
     visService.meter = vm.meter;
     vm.selectedVisualizer = visualizers[0];
 
-    console.log(vm.selectedVisualizer);
 
     //////////////////////////////////////////////////////////////////
 

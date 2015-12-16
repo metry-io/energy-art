@@ -1,5 +1,9 @@
 <div class="sidebar">
 
+  <div class="sidebar-settings" ng-show="settings">SETTINGS</div>
+
+  <span class="glyphicon glyphicon-cog" ng-init="settings = false" ng-click="settings = !settings" ng-model="settings"></span>
+
 	<div class="sidebar-component">
 
 		<div class="form-group">
