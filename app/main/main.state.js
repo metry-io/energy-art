@@ -5,6 +5,7 @@ angular.module('energyArtApp')
 	  templateUrl: 'main/main.html',
 	  onEnter: function($state, $window, emAuth){
 	  	var code = ($window.location.search.replace("?code=", "")).replace("&state=emAuth","");
+
 	  	if(!emAuth.isAuthenticated() && code == ""){
 	  		$state.go('auth');
 	  	}

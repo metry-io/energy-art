@@ -27,6 +27,7 @@ angular
   ])
   .config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/');
+    console.log("going to main");
   });
 
 
@@ -41,3 +42,10 @@ angular
       auth.setPrivateToken(config.privateToken);
     }
     ]);
+
+
+//Make sure that we track errors on ui-router
+angular.module('energyArtApp').run(['$rootScope',
+    function($rootScope){
+  $rootScope.$on("$stateChangeError", console.log.bind(console));
+}]);

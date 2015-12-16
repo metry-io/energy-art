@@ -9,9 +9,11 @@ angular.module('energyArtApp')
 	  controllerAs: 'sidebar',
 	  resolve:{
 	  	meters: function(dataservice){
+        console.log("fetching data");
 	  	  return dataservice.getMeters();
 	  	},
 	  	visualizers: function(visService){
+        console.log("fetching data");
 	  		return visService.visualizers;
 	  	}
 	  }
