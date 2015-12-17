@@ -1,3 +1,4 @@
+
 angular.module('commons', ['energimolnet'])
   .factory('dataservice', function ($rootScope, emMeters, emDateUtil, emConsumptions) {
 
@@ -10,7 +11,7 @@ angular.module('commons', ['energimolnet'])
       dateDiffInDays: dateDiffInDays
     };
 
-    service.counties = [];
+    var counties = [];
 
     return service;
 
@@ -63,13 +64,13 @@ angular.module('commons', ['energimolnet'])
 
       geocoder.geocode({"address": address}, function (results, status) {
         alert(results[0].address_components[2].short_name);
-        service.counties.push(results[0].address_components[2].short_name);
+        counties.push(results[0].address_components[2].short_name);
 
       });
     }
 
     function getCounty(address) {
-      return service.counties;
+      return counties;
     }
 
 

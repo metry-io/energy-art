@@ -2,9 +2,9 @@
 
 /**
  * @ngdoc directive
- * @name energyArtApp.hexagon.directive
+ * @name energyArtApp.geomap.directive
  * @description
- * # hexagon.directive
+ * # geomap.directive
  * Factory in the energyArtApp.
  */
 
@@ -15,9 +15,12 @@ angular.module('energyArtApp')
       scope: {
       },
       restrict: 'E',
-      link: function(scope, ele) {
+      link: function(scope, ele, attr) {
 
-        dataservice.getMeterDayData(visService.meter).then(function(d){
+        var startDate = new Date(attr.startDate),
+          endDate = new Date(attr.endDate);
+
+        dataservice.getMeterDayData(visService.meter, startDate, endDate).then(function(d){
           scope.days = d;
         });
 
