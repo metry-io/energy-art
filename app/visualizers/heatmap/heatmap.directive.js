@@ -9,7 +9,7 @@
  */
 
 angular.module('energyArtApp')
-  .directive('radialChart', ['d3Service', 'dataservice', 'visService', function (d3Service, dataservice, visService) {
+  .directive('heatmap', ['d3Service', 'dataservice', 'visService', function (d3Service, dataservice, visService) {
     // Runs during compile
     return {
       scope: {
@@ -32,27 +32,64 @@ angular.module('energyArtApp')
 
         scope.$watch('days', function (days) {
 
-          d3Service.d3().then(function (d3) {
+          if( days !== undefined){
+            d3Service.d3().then(function (d3) {
 
-            var color = d3.scale.linear()
-              .clamp(true)
-              .domain([0, scope.max])
-              .range(["hsl(235, 70%, 30%)", "hsl(235, 70%, 95%)"]);
+              var width,
+                height;
 
-            window.onresize = function () {
-              scope.$apply();
-            };
+              var vis = d3.select(ele[0])
+                .append("svg");
 
-            // Watch for resize event
-            scope.$watch(function () {
-              return angular.element(window)[0].innerWidth;
-            }, function () {
-              if(days !== undefined ) scope.render(days);
+              var color = d3.scale.linear()
+                .clamp(true)
+                .domain([0, scope.max])
+                .range(["hsl(235, 70%, 0%)", "hsl(235, 70%, 95%)"]);
+
+              window.onresize = function () {
+                scope.$apply();
+              };
+
+              // Watch for resize event
+              scope.$watch(function () {
+                return angular.element(window)[0].innerWidth;
+              }, function () {
+                width = angular.element(window)[0].innerWidth;
+                height = angular.element(window)[0].innerHeight * 0.60;
+
+                // Make sure that the element i cleaned from svg's
+                d3.select(ele[0]).selectAll("svg").remove();
+                vis = d3.select(ele[0])
+                  .append("svg")
+                  .attr("width", width)
+                  .attr("height", height);
+                if(days !== undefined ) scope.render(days);
+              });
+
+              scope.render = function (days) {
+                days.forEach(function (data, day) {
+                  data.forEach(function (value, hour) {
+
+                    var rectWidth = width / 300,
+                      rectHeight = height / 24;
+
+                    vis.append("rect")
+                      .attr("x", day * rectWidth)
+                      .attr("y", hour * rectHeight)
+                      .attr("width", rectWidth)
+                      .attr("height", rectHeight)
+                      .attr("fill", color(value))
+                      .append("title")
+                      .text(function () {
+                        return value + " kWh";
+                      });
+                  });
+                });
+
+              };
             });
+          }
 
-            scope.render = function (days) {
-            };
-          });
         })
       }
     };
