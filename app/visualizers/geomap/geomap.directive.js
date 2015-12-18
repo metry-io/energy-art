@@ -73,6 +73,7 @@ angular.module('energyArtApp')
             scope.render = function(map){
 
               d3.select(ele[0]).selectAll("svg").remove();
+
               var vis = d3.select(ele[0]).append("svg")
                 .attr("width", width)
                 .attr("height", height);

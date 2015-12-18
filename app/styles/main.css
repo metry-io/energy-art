@@ -136,22 +136,6 @@ html, body {
           transition-timing-function: cubic-bezier(0.420, 0.000, 0.580, 1.000); /* ease-in-out */
 }
 
-.sidebar{
-  height: 15%;
-  margin-bottom: 100px;
-}
-
-.sidebar-component{
-  padding: 10px;
-  height: 100%;
-  margin: auto;
-  width: 15%;
-  text-align: center;
-}
-
-.sidebar-component .form-group select{
-  text-align: center;
-}
 
 .meter-info{
   margin-bottom: 15px;
@@ -195,7 +179,7 @@ svg{
 }
 
 polygon{
-  stroke: #A4A4A4;
+  stroke: black;
 
   transition: stroke 0.05s linear 0s;
   transition: stroke-width 0.05s ease-in-out 0s;
@@ -246,13 +230,66 @@ path:hover{
 
 /*
 --------------------------------------------------------
-SETTINGS
+SIDEBAR
 --------------------------------------------------------
 */
+
+.sidebar{
+  margin:0;
+  position: absolute;
+  height: 100%;
+}
+
+.sidebar-tabs{
+  padding-top:20px;
+  background:#101010;
+  height: 100%;
+}
+
+span.sidebar-tab{
+  color:#656565;
+  font-size:32px;
+}
+
+.btn-tab{
+  background: none;
+  outline: none;
+  position: relative;
+}
+
+.btn-tab.active{  background: none;  background: black;}
+.btn-tab:hover{  background: black;}
+.btn-tab:active{  outline: 0 !important;}
+.btn-tab:focus{  outline: 0 !important;}
+
+span.sidebar-tab:hover{
+  color:#252525;
+}
+
+.sidebar-toggle{
+  position:absolute;
+  z-index: 3;
+  fill: black;
+}
+
+.sidebar-component{
+  background:#010101;
+  top:0;
+  left:50px;
+  padding: 20px;
+  position:absolute;
+  height: 100%;
+  width:300px;
+}
+
+
 .sidebar-settings{
+  padding:10px;
+  margin:0;
+  width: 10%;
   background:#252525;
   transition: all ease-in-out 0.5s;
-  height: 40%;
+  height: 25%;
 }
 
 .sidebar-settings.ng-hide{

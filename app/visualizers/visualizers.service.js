@@ -3,6 +3,9 @@ angular.module('visualizers', ['energimolnet'])
     var service = this;
     service.meter = undefined;
     service.meters = "meters";
+    service.startDate = "2014-01-01";
+    service.endDate = "2014-02-01";
+
     service.visualizers = [
 	    	{
 	    		"name": "radialchart",

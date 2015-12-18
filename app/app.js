@@ -23,7 +23,8 @@ angular
     'commons',
     'visualizers',
     'angular-spinkit',
-    'd3'
+    'd3',
+    'ui.select'
   ])
   .config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/');

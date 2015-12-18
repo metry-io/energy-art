@@ -6,6 +6,24 @@ angular.module('energyArtApp')
     vm.meter = meters[0];
     visService.meter = vm.meter;
     vm.selectedVisualizer = visualizers[0];
+    vm.activeTab = "none";
+    vm.status = {
+      opened: false
+    };
+
+
+    vm.tabs = [
+      {
+        icon: "glyphicon-flash",
+        name: "general",
+        template: "main/sidebar/tabs/general.tmpl.html"
+      },
+      {
+        icon: "glyphicon-time",
+        name: "time",
+        template: "main/sidebar/tabs/time.tmpl.html"
+      }
+    ];
 
 
     //////////////////////////////////////////////////////////////////
@@ -25,6 +43,7 @@ angular.module('energyArtApp')
     };
 
     vm.loadVisualizer = function(date){
+      console.log(vm.selectedVisualizer.name);
       visService.date = date;
       $state.go(vm.selectedVisualizer.name);
     };
@@ -32,6 +51,24 @@ angular.module('energyArtApp')
     vm.logOut = function(){
       emAuth.setRefreshToken(null);
       $state.go('auth');
+    };
+
+    vm.toggleActiveTab = function(tab){
+      if(vm.activeTab == tab) vm.activeTab = "none";
+      else vm.activeTab = tab;
+    };
+
+    vm.openDate = function($event){
+      vm.status.opened = true;
+      console.log(vm.status.opened);
+    };
+
+    vm.setStartDate = function(date){
+      visService.startDate = date;
+    }
+
+    vm.setEndDate = function(date) {
+      visService.endDate = date;
     }
 
   });

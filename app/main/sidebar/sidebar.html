@@ -1,11 +1,28 @@
 <div class="sidebar">
 
-  <div class="sidebar-settings" ng-show="settings">SETTINGS</div>
+  <div class="sidebar-tabs">
 
-  <span class="glyphicon glyphicon-cog" ng-init="settings = false" ng-click="settings = !settings" ng-model="settings"></span>
+    <div class="sidebar-tab" ng-repeat="tab in sidebar.tabs">
 
-	<div class="sidebar-component">
+      <button type="button" class="btn btn-block btn-tab" ng-class="tab.name == sidebar.activeTab ? 'active' : ''">
+        <span class="glyphicon {{tab.icon}} sidebar-tab" ng-click="sidebar.toggleActiveTab(tab.name)"></span>
+      </button>
 
+      <div ng-show="tab.name == sidebar.activeTab" class="sidebar-component">
+        <div ng-include src="tab.template"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+
+
+    <!--
 		<div class="form-group">
 			<label for="meter">Select Meter</label>
 	    <select
@@ -17,6 +34,7 @@
         ng-options="meter as meter.ean for meter in sidebar.meters"></select>
 		</div>
 
+
 		<div class="form-group">
 			<label for="visualizer">Select Visualizer</label>
 	    <select
@@ -27,8 +45,8 @@
         ng-change="sidebar.selectVisualizer(selectedVisualizer)"
         ng-options="visualizer as visualizer.name for visualizer in sidebar.visualizers"></select>
 		</div>
+  -->
 
-	</div>
 
 	<!--
 	<h2>Select year</h2>
