@@ -17,98 +17,111 @@ angular.module('energyArtApp')
         endDate: '='
       },
       restrict: 'E',
-      link: function (scope, ele, attr) {
+      link: function (scope, ele) {
 
-        var startDate = new Date(attr.startDate),
-          endDate = new Date(attr.endDate);
+        scope.$watchCollection(
+          function() { return visService.getParameters(); },
+          function(parameters) {
 
-        // Initialize parameters that the visualization depends on
-        var startDate = new Date(attr.startDate),
-          endDate = new Date(attr.endDate);
+            // Initializer parameters
+            var meter = parameters[0];
+            var startDate = new Date(parameters[1]);
+            var endDate = new Date(parameters[2]);
 
-        //TODO: Create a watch for ANY changes on parameters that affects the visualizations
-        scope.$watch(function(){
-            return visService.meter;
-          },
-          function(meter) {
-            scope.meter = meter;
+            if(parametersOK(parameters)){
+              renderVis();
+            }
 
-            var numDays = dateDiffInDays(startDate, endDate);
+            function renderVis(){
 
-            dataservice.getMeterDayData(visService.meter, startDate, endDate).then(function (d) {
-              scope.days = d;
-            });
+              var numDays = dateDiffInDays(startDate, endDate);
 
-            dataservice.getMaxHourValue(visService.meter).then(function (d) {
-              scope.max = d;
-            });
+              dataservice.getMeterDayData(meter, startDate, endDate).then(function (d) {
+                scope.days = d;
+              });
 
-            scope.$watch('days', function (days) {
+              dataservice.getMaxHourValue(meter).then(function (d) {
+                scope.max = d;
+              });
 
-              if (days !== undefined) {
-                d3Service.d3().then(function (d3) {
+              scope.$watch('days', function (days) {
 
-                  var width = 0,
-                    height = 0;
+                if (days !== undefined) {
+                  d3Service.d3().then(function (d3) {
 
-                  // Make sure that the element i cleaned from svg's
-                  d3.select(ele[0]).selectAll("svg").remove();
+                    var width = 0,
+                      height = 0;
 
-                  var vis = d3.select(ele[0])
-                    .append("svg")
-                    .attr("width", "100%")
-                    .attr("height", "100%");
+                    // Make sure that the element i cleaned from svg's
+                    d3.select(ele[0]).selectAll("svg").remove();
 
-                  var color = d3.scale.linear()
-                    .clamp(true)
-                    .domain([0, scope.max])
-                    .range(["hsl(235, 70%, 0%)", "hsl(235, 70%, 95%)"]);
+                    var vis = d3.select(ele[0])
+                      .append("svg")
+                      .attr("width", "100%")
+                      .attr("height", "100%");
 
-
-                  window.onresize = function () {
-                    scope.$apply();
-                  };
-
-                  // Watch for resize event
-                  scope.$watch(function () {
-                    return angular.element(window)[0].innerWidth;
-                  }, function () {
-                    width = vis.node().getBoundingClientRect().width;
-                    height = vis.node().getBoundingClientRect().height;
-
-                    // Do find a better solution...
-                    if (days !== undefined) scope.render(days);
-                  });
-
-                  scope.render = function (days) {
-                    vis.selectAll("*").remove();
+                    var color = d3.scale.linear()
+                      .clamp(true)
+                      .domain([0, scope.max])
+                      .range(["hsl(235, 70%, 0%)", "hsl(235, 70%, 95%)"]);
 
 
-                    days.forEach(function (data, day) {
-                      data.forEach(function (value, hour) {
+                    window.onresize = function () {
+                      scope.$apply();
+                    };
 
-                        var rectWidth = width / numDays,
-                          rectHeight = height / 24,
-                          xOffset = 60;
+                    // Watch for resize event
+                    scope.$watch(function () {
+                      return angular.element(window)[0].innerWidth;
+                    }, function () {
+                      width = vis.node().getBoundingClientRect().width;
+                      height = vis.node().getBoundingClientRect().height;
 
-                        vis.append("rect")
-                          .attr("x", xOffset + day * rectWidth)
-                          .attr("y", hour * rectHeight)
-                          .attr("width", rectWidth)
-                          .attr("height", rectHeight)
-                          .attr("fill", color(value))
-                          .append("title")
-                          .text(function () {
-                            return value + " kWh";
-                          });
-                      });
+                      // Do find a better solution...
+                      if (days !== undefined) scope.render(days);
                     });
 
-                  };
-                });
-              }
+                    scope.render = function (days) {
+                      vis.selectAll("*").remove();
 
-            })
+
+                      days.forEach(function (data, day) {
+                        data.forEach(function (value, hour) {
+
+                          var rectWidth = width / numDays,
+                            rectHeight = height / 24,
+                            xOffset = 60;
+
+                          vis.append("rect")
+                            .attr("x", xOffset + day * rectWidth)
+                            .attr("y", hour * rectHeight)
+                            .attr("width", rectWidth)
+                            .attr("height", rectHeight)
+                            .attr("fill", color(value))
+                            .append("title")
+                            .text(function () {
+                              return value + " kWh";
+                            });
+                        });
+                      });
+
+                    };
+                  });
+                }
+
+              })
+
+            }
+
+            ///////////////////////////////////////////////////////
+
+            function parametersOK(parameters){
+              for ( var i = 0; i < parameters.length; i++){
+                if(parameters[i] == undefined) return false;
+              }
+              return true;
+            }
+
           });
       }
     };

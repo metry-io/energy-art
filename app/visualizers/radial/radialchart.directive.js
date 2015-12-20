@@ -19,124 +19,186 @@ angular.module('energyArtApp')
       restrict: 'E',
       link: function (scope, ele) {
 
-        // Initialize parameters that the visualization depends on
-        var startDate = new Date(visService.startDate),
-            endDate = new Date(visService.endDate);
+        scope.$watchCollection(
+          function() { return visService.getParameters(); },
+          function(parameters) {
 
-        //TODO: Create a watch for ANY changes on parameters that affects the visualizations
-        scope.$watch(function(){
-            return visService.meter;
-          },
-          function(meter) {
-            scope.meter = meter;
+            // Initializer parameters
+            var meter = parameters[0];
+            var startDate = new Date(parameters[1]);
+            var endDate = new Date(parameters[2]);
 
-            var numDays = dateDiffInDays(startDate, endDate);
+            if(parametersOK(parameters)){
+              renderVis();
+            }
 
-            dataservice.getMeterDayData(visService.meter, startDate, endDate).then(function (d) {
-              scope.days = d;
-            });
+            // Handles everything that concerns the rendering
+            function renderVis(){
 
-
-            dataservice.getMaxHourValue(visService.meter).then(function (d) {
-              scope.max = d;
-            });
-
-
-            scope.$watch('days', function (days) {
-
-              d3Service.d3().then(function (d3) {
-
-                var width = angular.element(window)[0].innerWidth,
-                  height = angular.element(window)[0].innerHeight;
-
-                // Make sure that the element i cleaned from svg's
-                d3.select(ele[0]).selectAll("svg").remove();
-
-                var vis = d3.select(ele[0])
-                  .append("svg")
-                  .attr("width", width)
-                  .attr("height", height);
-
-                var arc = d3.svg.arc();
-
-                var valueScale = d3.scale.linear()
-                  .domain([0, scope.max])
-                  .range([0, 10]);
-
-                var color = d3.scale.linear()
-                  .clamp(true)
-                  .domain([0, scope.max])
-                  .range(["hsl(235, 70%, 30%)", "hsl(235, 70%, 95%)"]);
-
-                window.onresize = function () {
-                  scope.$apply();
-                };
-
-                // Watch for resize event
-                scope.$watch(function () {
-                  return angular.element(window)[0].innerWidth;
-                }, function () {
-                  if (days !== undefined) scope.render(days);
-                });
-
-                scope.render = function (days) {
-                  vis.selectAll("*").remove();
-
-                  // it is recommended to use d3's each function for this but it was not as straightforward as one would
-                  // hoped it would be to use that method. But try at least to use it on the data variable
-                  days.forEach(function (data, day) {
-                    data.forEach(function (value, hour) {
-                      var ir = hour * 10,
-                        or = ir + valueScale(value),
-                        sa = 2 * Math.PI * ((day - 1) / numDays),
-                        ea = 2 * Math.PI * (day / numDays),
-                        scale = 1.5;
-
-                      arc.innerRadius(ir * scale)
-                        .outerRadius(or *scale)
-                        .startAngle(sa)
-                        .endAngle(ea);
-
-                      vis.append("path")
-                        .attr("d", arc)
-                        .attr("fill", color(value))
-                        .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
-                        .append("title")
-                        .text(function () {
-                          return value + " kWh";
-                        });
-
-
-                      /*
-                       MAKE INFO OPTIONAL
-                       vis.append("text")
-                       .attr("text-anchor", "middle")
-                       .attr("font-size", "36px")
-                       .attr("font-weight", "800")
-                       .attr("fill", "#A4A4A4")
-                       .attr("transform", "translate(500 , 40)")
-                       .text(startDate.toDateString());
-
-                       vis.append("text")
-                       .attr("text-anchor", "middle")
-                       .attr("font-size", "36px")
-                       .attr("font-weight", "800")
-                       .attr("fill", "#A4A4A4")
-                       .attr("transform", "translate(1300 , 40)")
-                       .text(endDate.toDateString());
-
-
-                       */
-                    })
-                  });
-                };
+              dataservice.getMeterDayData(meter, startDate, endDate).then(function (d) {
+                scope.days = d;
               });
 
-            })
-          });
+              var numDays = dateDiffInDays(startDate, endDate);
+
+              console.log(numDays);
+
+              dataservice.getMaxHourValue(meter).then(function (d) {
+                scope.max = d;
+              });
+
+              scope.$watch('days', function (days) {
+
+                d3Service.d3().then(function (d3) {
+
+                  var width = angular.element(window)[0].innerWidth,
+                    height = angular.element(window)[0].innerHeight;
+
+                  // Make sure that the element i cleaned from svg's
+                  d3.select(ele[0]).selectAll("svg").remove();
+
+                  var vis = d3.select(ele[0])
+                    .append("svg")
+                    .attr("width", width)
+                    .attr("height", height);
+
+                  var arc = d3.svg.arc();
+
+                  var valueScale = d3.scale.linear()
+                    .domain([0, scope.max])
+                    .range([0, 10]);
+
+                  var color = d3.scale.linear()
+                    .clamp(true)
+                    .domain([0, scope.max])
+                    .range(["hsl(235, 70%, 30%)", "hsl(235, 70%, 95%)"]);
+
+                  window.onresize = function () {
+                    scope.$apply();
+                  };
+
+                  // Watch for resize event
+                  scope.$watch(function () {
+                    return angular.element(window)[0].innerWidth;
+                  }, function () {
+                    if (days !== undefined) scope.render(days);
+                  });
+
+                  scope.render = function (days) {
+                    vis.selectAll("*").remove();
+
+                    // it is recommended to use d3's each function for this but it was not as straightforward as one would
+                    // hoped it would be to use that method. But try at least to use it on the data variable
+                    days.forEach(function (data, day) {
+                      data.forEach(function (value, hour) {
+                        var ir = hour * 10,
+                          or = ir + valueScale(value),
+                          sa = 2 * Math.PI * ((day - 1) / numDays),
+                          ea = 2 * Math.PI * (day / numDays),
+                          scale = 1.5;
+
+                        arc.innerRadius(ir * scale)
+                          .outerRadius(or *scale)
+                          .startAngle(sa)
+                          .endAngle(ea);
+
+                        vis.append("path")
+                          .attr("d", arc)
+                          .attr("fill", color(value))
+                          .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+                          .append("title")
+                          .text(function () {
+                            return value + " kWh";
+                          });
+
+                        var x = d3.scale.linear()
+                          .domain([0, 180])
+                          .range([0, width])
+                          .clamp(true);
+
+                        var brush = d3.svg.brush()
+                          .x(x)
+                          .extent([0, 0])
+                          .on("brush", brushed);
+
+
+                        var slider = vis.append("g")
+                          .call(brush);
+
+                        slider.selectAll(".extent,.resize")
+                          .remove();
+
+                        slider.select(".background")
+                          .attr("height", height);
+
+                        var handle = slider.append("circle")
+                          .attr("class", "handle")
+                          .attr("transform", "translate(0," + height / 2 + ")")
+                          .attr("r", 9);
+
+                        slider
+                          .call(brush.event)
+                          .transition() // gratuitous intro!
+                          .duration(750)
+                          .call(brush.extent([70, 70]))
+                          .call(brush.event);
+
+                        function brushed() {
+                          var value = brush.extent()[0];
+
+                          if (d3.event.sourceEvent) { // not a programmatic event
+                            value = x.invert(d3.mouse(this)[0]);
+                            brush.extent([value, value]);
+                          }
+
+                          handle.attr("cx", x(value));
+                        }
+
+                        /*
+                         MAKE INFO OPTIONAL
+                         vis.append("text")
+                         .attr("text-anchor", "middle")
+                         .attr("font-size", "36px")
+                         .attr("font-weight", "800")
+                         .attr("fill", "#A4A4A4")
+                         .attr("transform", "translate(500 , 40)")
+                         .text(startDate.toDateString());
+
+                         vis.append("text")
+                         .attr("text-anchor", "middle")
+                         .attr("font-size", "36px")
+                         .attr("font-weight", "800")
+                         .attr("fill", "#A4A4A4")
+                         .attr("transform", "translate(1300 , 40)")
+                         .text(endDate.toDateString());
+
+
+                         */
+                      })
+                    });
+                  };
+                });
+              });
+
+            }
+
+            ///////////////////////////////////////////////////////
+
+            function parametersOK(parameters){
+              for ( var i = 0; i < parameters.length; i++){
+                if(parameters[i] == undefined) return false;
+              }
+              return true;
+            }
+
+
+
+          }
+        );
       }
     };
   }]);
+
 
 var _MS_PER_DAY = 1000 * 60 * 60 * 24;
 
@@ -148,4 +210,3 @@ function dateDiffInDays(a, b) {
 
   return Math.floor((utc2 - utc1) / _MS_PER_DAY);
 }
-

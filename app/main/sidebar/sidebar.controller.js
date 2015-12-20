@@ -3,9 +3,7 @@ angular.module('energyArtApp')
   	var vm = this;
   	vm.visualizers = visualizers;
     vm.meters = meters;
-    vm.meter = meters[0];
     visService.meter = vm.meter;
-    vm.selectedVisualizer = visualizers[0];
     vm.activeTab = "none";
     vm.status = {
       opened: false
@@ -29,23 +27,25 @@ angular.module('energyArtApp')
     //////////////////////////////////////////////////////////////////
 
     vm.selectMeter = function(meter){
-      visService.meter = meter;
-      vm.selectedMeter = visService.meter;
+      console.log("selecting meter");
+      visService.setMeter(meter._id);
+      vm.selectedMeter = meter;
+      if(vm.selectedVisualizer != undefined) vm.loadVisualizer();
       // Move to settings bar
       //vm.first = emDateUtil.getDate(meter.consumption_stats.energy.day.first);
       //vm.last = emDateUtil.getDate(meter.consumption_stats.energy.day.last);
     };
 
     vm.selectVisualizer = function(visualizer){
-      visService.visualizer = visualizer;
-      vm.selectedVisualizer = visService.visualizer;
-      vm.loadVisualizer("default");
+      console.log(visualizer);
+      //visService.visualizer = visualizer;
+      vm.selectedVisualizer = visualizer;
+      if(vm.selectedMeter != undefined) vm.loadVisualizer();
     };
 
-    vm.loadVisualizer = function(date){
-      console.log(vm.selectedVisualizer.name);
-      visService.date = date;
-      $state.go(vm.selectedVisualizer.name);
+    vm.loadVisualizer = function(){
+      console.log(vm.selectedVisualizer.url);
+      $state.go(vm.selectedVisualizer.url);
     };
 
     vm.logOut = function(){
@@ -64,11 +64,11 @@ angular.module('energyArtApp')
     };
 
     vm.setStartDate = function(date){
-      visService.startDate = date;
-    }
+      visService.setStartDate(date);
+    };
 
     vm.setEndDate = function(date) {
-      visService.endDate = date;
-    }
+      visService.setEndDate(date);
+    };
 
   });

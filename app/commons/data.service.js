@@ -8,7 +8,7 @@ angular.module('commons', ['energimolnet'])
       getMeters: getMeters,
       addCounty: addCounty,
       getCounty: getCounty,
-      dateDiffInDays: dateDiffInDays
+      getLatestConsumptionDate: getLatestConsumptionDate
     };
 
     var counties = [];
@@ -27,14 +27,14 @@ angular.module('commons', ['energimolnet'])
 
     function getMeterDayData(meter, startDate, endDate) {
       var days = [];
-      var meterId = meter._id;
       var period = emDateUtil.getDayPeriod([startDate, endDate]);
 
-      return emConsumptions.get(meterId, 'hour', period)
+      return emConsumptions.get(meter, 'hour', period)
         .then(function (consumptions) {
           var data = consumptions[0].periods[0].energy;
+          var numDays = dateDiffInDays(startDate, endDate);
 
-          for (var d = 0; d < 364; d++) {
+          for (var d = 0; d < numDays; d++) {
             days.push(data.splice(0, 24));
           }
 
@@ -42,17 +42,27 @@ angular.module('commons', ['energimolnet'])
         });
     }
 
+    function getLatestConsumptionDate(meter){
+      return emMeters.get(meter)
+        .then(function(m) {
+          var hourData, latestDate;
+
+          hourData = m.consumption_stats.energy.hour;
+          latestDate = emDateUtil.getDate(hourData.last.toString());
+
+          return latestDate;
+          });
+    }
+
     function getMaxHourValue(meter) {
-      var meterId = meter._id;
-      return emMeters.get(meterId)
+      return emMeters.get(meter)
         .then(function (m) {
           return m.consumption_stats.energy.hour.max;
         });
     }
 
     function getMinHourValue(meter) {
-      var meterId = meter._id;
-      return emMeters.get(meterId)
+      return emMeters.get(meter)
         .then(function (m) {
           return m.consumption_stats.energy.hour.min;
         });
@@ -76,3 +86,15 @@ angular.module('commons', ['energimolnet'])
 
 
   });
+
+var _MS_PER_DAY = 1000 * 60 * 60 * 24;
+
+// a and b are javascript Date objects
+function dateDiffInDays(a, b) {
+  // Discard the time and time-zone information.
+  var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+  var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+  return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+}
+
