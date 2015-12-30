@@ -27,10 +27,13 @@ angular.module('energyArtApp')
           function(parameters) {
 
             if(parametersOK(parameters)){
+
               // Initialize parameters
               var meter = parameters[0];
               var startDate = new Date(parameters[1]);
               var endDate = new Date(parameters[2]);
+              var startColor = parameters[3];
+              var endColor = parameters[4];
 
               renderVis();
             }
@@ -92,7 +95,7 @@ angular.module('energyArtApp')
                     //hack to fix 0 values being ignored inside range due to log function
                     .clamp(true)
                     .domain([0.1, maxBin])
-                    .range(["hsl(235, 10%, 10%)", "hsl(235, 70%, 95%)"]);
+                    .range([startColor, endColor]);
 
                   var hexagonSize = scope.size;
                   var hexagonWidth = hexagonSize * Math.sqrt(3);
@@ -218,6 +221,8 @@ angular.module('energyArtApp')
                         return d.value + " occurances around " + Math.round(d.consumption * 100) + " Wh in consumption";
                       });
 
+                    /*
+
                     var x = d3.scale.linear()
                       .domain([0, 180])
                       .range([width *0.15,  width *0.85])
@@ -236,7 +241,8 @@ angular.module('energyArtApp')
                       .remove();
 
                     slider.select(".background")
-                      .attr("height", height);
+                      .attr("height", 20)
+                      .attr("y", height * 0.95);
 
                     var handle = slider.append("circle")
                       .attr("class", "handle")
@@ -247,7 +253,7 @@ angular.module('energyArtApp')
                       .call(brush.event)
                       .transition() // gratuitous intro!
                       .duration(750)
-                      .call(brush.extent([70, 70]))
+                      .call(brush.extent([70, height * 0.95]))
                       .call(brush.event);
 
                     function brushed() {
@@ -260,7 +266,7 @@ angular.module('energyArtApp')
 
                       handle.attr("cx", x(value));
                     }
-
+                    */
 
                     /*
                      MAKE THIS OPTIONAL

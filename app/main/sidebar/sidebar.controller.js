@@ -20,6 +20,16 @@ angular.module('energyArtApp')
         icon: "glyphicon-time",
         name: "time",
         template: "main/sidebar/tabs/time.tmpl.html"
+      },
+      {
+        icon: "glyphicon-pencil",
+        name: "color",
+        template: "main/sidebar/tabs/color.tmpl.html"
+      },
+      {
+        icon: "glyphicon-log-out",
+        name: "logout",
+        template: "main/sidebar/tabs/logout.tmpl.html"
       }
     ];
 
@@ -70,5 +80,17 @@ angular.module('energyArtApp')
     vm.setEndDate = function(date) {
       visService.setEndDate(date);
     };
+
+    vm.setStartColor = function(color){
+      visService.setStartColor(color);
+    };
+
+    vm.setEndColor = function(color) {
+      visService.setEndColor(color);
+    };
+
+    vm.getMeter = function() {
+      return visService.getMeter();
+    }
 
   });

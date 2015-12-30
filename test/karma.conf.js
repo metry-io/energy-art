@@ -39,6 +39,7 @@ module.exports = function(config) {
       'bower_components/topojson/topojson.js',
       'bower_components/ui-select/dist/select.js',
       'bower_components/moment/moment.js',
+      'bower_components/spectrum/spectrum.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/**/*.js",

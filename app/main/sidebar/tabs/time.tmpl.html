@@ -1,13 +1,10 @@
-<div class="col-md-4">
+<label>Start</label>
+<p class="input-group">
+  <input ng-model="startDate"  ng-change="sidebar.setStartDate(startDate)"  name="startDate" type="date" class="form-control" uib-datepicker-popup is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+</p>
 
-  <label>Start</label>
-  <p class="input-group">
-    <input ng-model="startDate"  ng-change="sidebar.setStartDate(startDate)"  name="startDate" type="date" class="form-control" uib-datepicker-popup is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
-  </p>
+<label>end</label>
+<p class="input-group">
+  <input ng-model="endDate" ng-change="sidebar.setEndDate(endDate)" name="endDate" type="date" class="form-control" uib-datepicker-popup is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
+</p>
 
-  <label>end</label>
-  <p class="input-group">
-    <input ng-model="endDate" ng-change="sidebar.setEndDate(endDate)" name="endDate" type="date" class="form-control" uib-datepicker-popup is-open="status.opened" min-date="minDate" max-date="maxDate" datepicker-options="dateOptions" ng-required="true" close-text="Close" />
-  </p>
-
-</div>

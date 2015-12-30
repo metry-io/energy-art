@@ -238,11 +238,17 @@ SIDEBAR
   margin:0;
   position: absolute;
   height: 100%;
+  z-index: 2;
+
+  -webkit-box-shadow: 5px 6px 23px 1px rgba(0,0,0,0.43);
+  -moz-box-shadow: 5px 6px 23px 1px rgba(0,0,0,0.43);
+  box-shadow: 5px 6px 23px 1px rgba(0,0,0,0.43);
 }
 
 .sidebar-tabs{
   padding-top:20px;
   background:#101010;
+  width:60px;
   height: 100%;
 }
 
@@ -268,18 +274,25 @@ span.sidebar-tab:hover{
 
 .sidebar-toggle{
   position:absolute;
-  z-index: 3;
   fill: black;
 }
 
 .sidebar-component{
   background:#010101;
-  top:0;
-  left:50px;
+  left:60px;
   padding: 20px;
   position:absolute;
-  height: 100%;
   width:300px;
+  /* btn-block is with small text under it is 71 px in height so we simple offset the settings box with this value */
+  margin-top: -71px;
+
+  -webkit-border-radius:;
+  -moz-border-radius:;
+  border-radius:0 15px 15px 0;
+
+  -webkit-box-shadow: 5px 6px 23px 1px rgba(0,0,0,0.43);
+  -moz-box-shadow: 5px 6px 23px 1px rgba(0,0,0,0.43);
+  box-shadow: 5px 6px 23px 1px rgba(0,0,0,0.43);
 }
 
 
@@ -296,6 +309,45 @@ span.sidebar-tab:hover{
   transform: translateY(-100%);
 }
 
+.ui-select-container input{
+  background:#252525;
+  border: 0;
+
+}
+.ui-select-match-text{
+  width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 40px;
+}
+
+.ui-select-toggle > .btn.btn-link {
+  margin-right: 10px;
+  top: 6px;
+  position: absolute;
+  right: 10px;
+}
+
+.ui-select-toggle > .btn.btn-link {
+  margin-right: 10px;
+  top: 6px;
+  position: absolute;
+  right: 10px;
+}
+
+.ui-select-toggle{
+  font-weight: 700;
+  color: #656565;
+  background:#252525;
+  border: 0;
+  text-overflow: clip;
+}
+
+
+.ui-select-choices-row-inner span{
+  font-weight: 700;
+  border: 0;
+}
 
 
 /*

@@ -7,6 +7,8 @@ angular.module('visualizers', ['energimolnet'])
     parameters.meter = undefined;
     parameters.startDate = undefined;
     parameters.endDate = undefined;
+    parameters.startColor = "hsl(235, 70%, 30%)";
+    parameters.endColor = "hsl(235, 70%, 95%)";
 
     $rootScope.$watch( function() {
       return service.getMeter();
@@ -71,8 +73,17 @@ angular.module('visualizers', ['energimolnet'])
       parameters.endDate = date;
     };
 
+    service.setStartColor = function(color){
+      parameters.startColor = color;
+    };
+
+    service.setEndColor = function(color){
+      parameters.endColor = color;
+    };
+
     service.getParameters = function(){
-      return [parameters.meter, parameters.startDate, parameters.endDate];
+      return [parameters.meter, parameters.startDate, parameters.endDate,
+              parameters.startColor, parameters.endColor];
     };
 
     service.getMeter = function(){

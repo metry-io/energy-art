@@ -23,10 +23,12 @@ angular.module('energyArtApp')
           function() { return visService.getParameters(); },
           function(parameters) {
 
-            // Initializer parameters
+            // Initialize parameters
             var meter = parameters[0];
             var startDate = new Date(parameters[1]);
             var endDate = new Date(parameters[2]);
+            var startColor = parameters[3];
+            var endColor = parameters[4];
 
             if(parametersOK(parameters)){
               renderVis();
@@ -71,7 +73,7 @@ angular.module('energyArtApp')
                   var color = d3.scale.linear()
                     .clamp(true)
                     .domain([0, scope.max])
-                    .range(["hsl(235, 70%, 30%)", "hsl(235, 70%, 95%)"]);
+                    .range([startColor, endColor]);
 
                   window.onresize = function () {
                     scope.$apply();
@@ -110,49 +112,6 @@ angular.module('energyArtApp')
                           .text(function () {
                             return value + " kWh";
                           });
-
-                        var x = d3.scale.linear()
-                          .domain([0, 180])
-                          .range([0, width])
-                          .clamp(true);
-
-                        var brush = d3.svg.brush()
-                          .x(x)
-                          .extent([0, 0])
-                          .on("brush", brushed);
-
-
-                        var slider = vis.append("g")
-                          .call(brush);
-
-                        slider.selectAll(".extent,.resize")
-                          .remove();
-
-                        slider.select(".background")
-                          .attr("height", height);
-
-                        var handle = slider.append("circle")
-                          .attr("class", "handle")
-                          .attr("transform", "translate(0," + height / 2 + ")")
-                          .attr("r", 9);
-
-                        slider
-                          .call(brush.event)
-                          .transition() // gratuitous intro!
-                          .duration(750)
-                          .call(brush.extent([70, 70]))
-                          .call(brush.event);
-
-                        function brushed() {
-                          var value = brush.extent()[0];
-
-                          if (d3.event.sourceEvent) { // not a programmatic event
-                            value = x.invert(d3.mouse(this)[0]);
-                            brush.extent([value, value]);
-                          }
-
-                          handle.attr("cx", x(value));
-                        }
 
                         /*
                          MAKE INFO OPTIONAL
