@@ -23,7 +23,8 @@ angular
     'commons',
     'visualizers',
     'angular-spinkit',
-    'd3'
+    'd3',
+    'ui.select'
   ])
   .config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/');
@@ -38,6 +39,14 @@ angular
     'emAuth',
     'authConfig',
     function(auth, config){
+      //TODO: fix this
       auth.setPrivateToken(config.privateToken);
     }
     ]);
+
+
+//Make sure that we track errors on ui-router
+angular.module('energyArtApp').run(['$rootScope',
+    function($rootScope){
+  $rootScope.$on("$stateChangeError", console.log.bind(console));
+}]);

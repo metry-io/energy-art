@@ -1,44 +1,34 @@
-<div class="sidebar">
+<div class="sidebar" >
 
-	<div class="sidebar-component">
+  <div class="sidebar-tabs" ng-mouseleave="sidebar.activeTab = undefined">
 
-		<div class="form-group">
-			<label for="meter">Select Meter</label>
-	    <select
-        id="meter"
-        class="form-control sidebar-dropdown"
-        ng-init="selectedMeter = sidebar.meter"
-        ng-model="selectedMeter"
-        ng-change="sidebar.selectMeter(selectedMeter)"
-        ng-options="meter as meter.ean for meter in sidebar.meters"></select>
-		</div>
+    <div class="sidebar-tab" ng-repeat="tab in sidebar.tabs track by $index">
 
-		<div class="form-group">
-			<label for="visualizer">Select Visualizer</label>
-	    <select
-        id="visualizer"
-        class="form-control sidebar-dropdown"
-        ng-init="selectedVisualizer=sidebar.selectedVisualizer"
-        ng-model="selectedVisualizer"
-        ng-change="sidebar.selectVisualizer(selectedVisualizer)"
-        ng-options="visualizer as visualizer.name for visualizer in sidebar.visualizers"></select>
-		</div>
+      <div>
+        <button type="button"
+                class="btn btn-block btn-tab"
+                ng-class="tab.name == sidebar.activeTab ? 'active' : ''"
+                ng-click="(tab.name == 'logout') ? sidebar.logOut():''"
+                ng-mouseenter="(tab.name != 'logout' && tab.name != sidebar.activeTab) ? sidebar.toggleActiveTab(tab.name):''">
 
+          <span class="glyphicon {{tab.icon}} sidebar-tab"></span>
+          <br>
+          <small>{{tab.name}}</small>
 
-	</div>
+        </button>
 
-	<!--
-	<h2>Select year</h2>
-	<div style="display:inline-block; min-height:250px;">
-	      <uib-datepicker ng-model="date" format-year="yy" min-mode="year" ng-model="dt" min-date="sidebar.first" max-date="sidebar.last" class="well well-sm" custom-class="getDayClass(date, mode)"></uib-datepicker>
-	</div>
+        <!-- padding top 20 px, size of tabs ? -->
+        <div ng-show="tab.name == sidebar.activeTab"
+             class="sidebar-component">
+          <div ng-include src="tab.template" ></div>
+        </div>
+      </div>
 
-	<button class="btn btn-success" ng-click="sidebar.loadVisualizer(date)"><h4>Visualize</h4></button>
-	-->
+    </div>
 
-	<button class="btn btn-signout btn-danger" ng-click="sidebar.logOut()">Log out</button>
+  </div>
 
 </div>
 
 <gln-loader class="loader"></gln-loader>
-<ui-view ng-show="!isStateLoading"></ui-view>
+<ui-view></ui-view>

@@ -1,0 +1,22 @@
+
+<label for="meterInput">Select Meter</label>
+<ui-select ng-init="sidebar.getMeter()" ng-model="selectedMeter" id="meterInput" ng-change="sidebar.selectMeter(selectedMeter)">
+  <ui-select-match>
+    <span ng-bind="$select.selected.address"></span>
+  </ui-select-match>
+  <ui-select-choices repeat="meter in (sidebar.meters | filter: $select.search) track by meter.ean">
+    <span ng-bind="meter.address"></span>
+  </ui-select-choices>
+</ui-select>
+
+<div class="form-group">
+  <label for="visualizerInput">Select Visualizer</label>
+  <ui-select ng-model="selectedVisualizer"  ng-change="sidebar.selectVisualizer(selectedVisualizer)">
+    <ui-select-match>
+      <span ng-bind="$select.selected.name" id="visualizerInput"></span>
+    </ui-select-match>
+    <ui-select-choices repeat="visualizer in (sidebar.visualizers | filter: $select.search) track by visualizer.name">
+      <span ng-bind="visualizer.name"></span>
+    </ui-select-choices>
+  </ui-select>
+</div>

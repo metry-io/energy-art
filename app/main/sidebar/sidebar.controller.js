@@ -3,38 +3,91 @@ angular.module('energyArtApp')
   	var vm = this;
   	vm.visualizers = visualizers;
     vm.meters = meters;
-    vm.meter = meters[0];
     visService.meter = vm.meter;
-    vm.selectedVisualizer = visualizers[0];
+    vm.activeTab = "none";
+    vm.status = {
+      opened: false
+    };
 
-    console.log(vm.selectedVisualizer);
+
+    vm.tabs = [
+      {
+        icon: "glyphicon-flash",
+        name: "general",
+        template: "main/sidebar/tabs/general.tmpl.html"
+      },
+      {
+        icon: "glyphicon-time",
+        name: "time",
+        template: "main/sidebar/tabs/time.tmpl.html"
+      },
+      {
+        icon: "glyphicon-pencil",
+        name: "color",
+        template: "main/sidebar/tabs/color.tmpl.html"
+      },
+      {
+        icon: "glyphicon-log-out",
+        name: "logout",
+        template: "main/sidebar/tabs/logout.tmpl.html"
+      }
+    ];
+
 
     //////////////////////////////////////////////////////////////////
 
     vm.selectMeter = function(meter){
-      visService.meter = meter;
-      vm.selectedMeter = visService.meter;
-      // Move to settings bar
-      //vm.first = emDateUtil.getDate(meter.consumption_stats.energy.day.first);
-      //vm.last = emDateUtil.getDate(meter.consumption_stats.energy.day.last);
+      console.log("selecting meter");
+      visService.setMeter(meter._id);
+      vm.selectedMeter = meter;
+      if(vm.selectedVisualizer != undefined) vm.loadVisualizer();
     };
 
     vm.selectVisualizer = function(visualizer){
-      visService.visualizer = visualizer;
-      vm.selectedVisualizer = visService.visualizer;
-      vm.loadVisualizer("default");
+      console.log(visualizer);
+      //visService.visualizer = visualizer;
+      vm.selectedVisualizer = visualizer;
+      if(vm.selectedMeter != undefined) vm.loadVisualizer();
     };
 
-    vm.loadVisualizer = function(date){
-      visService.date = date;
-      console.log("load visualizer");
-      console.log(vm.selectedVisualizer.name);
-      $state.go(vm.selectedVisualizer.name);
+    vm.loadVisualizer = function(){
+      console.log(vm.selectedVisualizer.url);
+      $state.go(vm.selectedVisualizer.url);
     };
 
     vm.logOut = function(){
       emAuth.setRefreshToken(null);
       $state.go('auth');
+    };
+
+    vm.toggleActiveTab = function(tab){
+      if(vm.activeTab == tab) vm.activeTab = "none";
+      else vm.activeTab = tab;
+    };
+
+    vm.openDate = function($event){
+      vm.status.opened = true;
+      console.log(vm.status.opened);
+    };
+
+    vm.setStartDate = function(date){
+      visService.setStartDate(date);
+    };
+
+    vm.setEndDate = function(date) {
+      visService.setEndDate(date);
+    };
+
+    vm.setStartColor = function(color){
+      visService.setStartColor(color);
+    };
+
+    vm.setEndColor = function(color) {
+      visService.setEndColor(color);
+    };
+
+    vm.getMeter = function() {
+      return visService.getMeter();
     }
 
   });
