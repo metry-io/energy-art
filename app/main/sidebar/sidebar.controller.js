@@ -41,9 +41,6 @@ angular.module('energyArtApp')
       visService.setMeter(meter._id);
       vm.selectedMeter = meter;
       if(vm.selectedVisualizer != undefined) vm.loadVisualizer();
-      // Move to settings bar
-      //vm.first = emDateUtil.getDate(meter.consumption_stats.energy.day.first);
-      //vm.last = emDateUtil.getDate(meter.consumption_stats.energy.day.last);
     };
 
     vm.selectVisualizer = function(visualizer){

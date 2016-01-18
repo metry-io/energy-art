@@ -1,18 +1,25 @@
-<div class="sidebar">
+<div class="sidebar" >
 
-  <div class="sidebar-tabs">
+  <div class="sidebar-tabs" ng-mouseleave="sidebar.activeTab = undefined">
 
     <div class="sidebar-tab" ng-repeat="tab in sidebar.tabs track by $index">
 
       <div>
-        <button type="button" class="btn btn-block btn-tab" ng-class="tab.name == sidebar.activeTab ? 'active' : ''" ng-click="(tab.name != 'logout') ? sidebar.toggleActiveTab(tab.name):sidebar.logOut()">
+        <button type="button"
+                class="btn btn-block btn-tab"
+                ng-class="tab.name == sidebar.activeTab ? 'active' : ''"
+                ng-click="(tab.name == 'logout') ? sidebar.logOut():''"
+                ng-mouseenter="(tab.name != 'logout' && tab.name != sidebar.activeTab) ? sidebar.toggleActiveTab(tab.name):''">
+
           <span class="glyphicon {{tab.icon}} sidebar-tab"></span>
           <br>
           <small>{{tab.name}}</small>
+
         </button>
 
         <!-- padding top 20 px, size of tabs ? -->
-        <div ng-show="tab.name == sidebar.activeTab" class="sidebar-component" style="transform:translate(-20,0)">
+        <div ng-show="tab.name == sidebar.activeTab"
+             class="sidebar-component">
           <div ng-include src="tab.template" ></div>
         </div>
       </div>
