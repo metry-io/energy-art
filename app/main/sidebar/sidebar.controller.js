@@ -5,10 +5,12 @@ angular.module('energyArtApp')
     vm.meters = meters;
     visService.meter = vm.meter;
     vm.activeTab = "none";
-    vm.status = {
+    vm.startDate = {
       opened: false
     };
-
+    vm.endDate = {
+      opened: false
+    };
 
     vm.tabs = [
       {
@@ -65,9 +67,12 @@ angular.module('energyArtApp')
       else vm.activeTab = tab;
     };
 
-    vm.openDate = function($event){
-      vm.status.opened = true;
-      console.log(vm.status.opened);
+    vm.openStartDate = function(){
+      vm.startDate.opened = true;
+    };
+
+    vm.openEndDate = function(){
+      vm.endDate.opened = true;
     };
 
     vm.setStartDate = function(date){
@@ -88,6 +93,10 @@ angular.module('energyArtApp')
 
     vm.getMeter = function() {
       return visService.getMeter();
-    }
+    };
+
+    vm.open2 = function() {
+      vm.popup2.opened = true;
+    };
 
   });

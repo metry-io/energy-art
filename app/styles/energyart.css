@@ -281,6 +281,26 @@ span.sidebar-tab:hover{
   border: 0;
 }
 
+.time .form-control{
+  font-weight: 700;
+  background:#252525;
+  border: 1px solid black;
+}
+
+.time .btn{
+  font-weight: 700;
+  color: #656565;
+  background: #252525;
+  border: 1px solid black;
+}
+
+.time .dropdown-menu{
+  font-weight: 700;
+  color: #656565;
+  background: #252525;
+  border: 1px solid black;
+}
+
 
 /*
 --------------------------------------------------------
@@ -351,3 +371,13 @@ NAVBAR
     background-color: #c4fff5;
   }
 }
+
+/*--------------------------------------------------------
+VISUALIZERS
+-----------------------------------------------------------*/
+
+.star path{
+  stroke: white;
+  stroke-opacity: 0.3;
+}
+
