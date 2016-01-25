@@ -57,12 +57,6 @@ angular.module('energyArtApp')
                     return i * 2 * Math.PI / 24;
                   });
 
-                /*
-                arc.innerRadius(0)
-                  .outerRadius(valueScale(value) * 40)
-                  .startAngle((index-1) * 2 * Math.PI / 24)
-                  .endAngle(index * Math.PI * 2 / 24);*/
-
                 window.onresize = function () {
                   scope.$apply();
                 };
