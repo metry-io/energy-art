@@ -381,3 +381,12 @@ VISUALIZERS
   stroke-opacity: 0.3;
 }
 
+
+.node circle {
+  fill-opacity: .25;
+}
+
+.leaf circle {
+  fill-opacity: 1;
+}
+

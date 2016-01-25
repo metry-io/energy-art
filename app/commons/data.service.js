@@ -37,7 +37,7 @@ angular.module('commons', ['energimolnet'])
 
           for (var d = 0; d < numDays; d++) {
             data.splice(0, 24).forEach(function(value) {
-              days.push({date: currentDate, value: value});
+              days.push({date: currentDate.toISOString(), value: value});
             });
 
             // Increment the current date by one day

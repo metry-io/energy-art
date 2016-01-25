@@ -29,6 +29,12 @@ angular.module('visualizers', ['energimolnet'])
           "url": "hexagon",
           "granularity": "day"
         },
+
+        {
+          "name": "Circle packing",
+          "url": "circle_packing",
+          "granularity": "day"
+        },
         /*
         {
           "name": "Geomap",
