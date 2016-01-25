@@ -33,9 +33,15 @@ angular.module('commons', ['energimolnet'])
         .then(function (consumptions) {
           var data = consumptions[0].periods[0].energy;
           var numDays = dateDiffInDays(startDate, endDate);
+          var currentDate = new Date(startDate.getTime());
 
           for (var d = 0; d < numDays; d++) {
-            days.push(data.splice(0, 24));
+            data.splice(0, 24).forEach(function(value) {
+              days.push({date: currentDate, value: value});
+            });
+
+            // Increment the current date by one day
+            currentDate.setDate(currentDate.getDate() + 1);
           }
 
           return days;
