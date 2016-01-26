@@ -89,7 +89,6 @@ angular.module('energyArtApp')
               .size([config.diameter - 4, config.diameter - 4])
               .value(function(d) { return  d.value; });
 
-
             window.onresize = function () {
               scope.$apply();
             };

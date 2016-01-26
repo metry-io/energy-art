@@ -384,6 +384,7 @@ VISUALIZERS
 
 .node circle {
   fill-opacity: .25;
+  margin: 10px;
 }
 
 .leaf circle {
