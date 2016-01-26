@@ -9,8 +9,8 @@
            class="form-control"
            uib-datepicker-popup
            is-open="sidebar.startDate.opened"
-           min-date="sidebar.first"
-           max-date="sidebar.last"
+           min-date="sidebar.minDate"
+           max-date="sidebar.maxDate"
            datepicker-options="dateOptions"
            ng-required="true"
            close-text="Close" />
@@ -30,8 +30,8 @@
            class="form-control"
            uib-datepicker-popup
            is-open="sidebar.endDate.opened"
-           min-date="sidebar.first"
-           max-date="sidebar.last"
+           min-date="sidebar.minDate"
+           max-date="sidebar.maxDate"
            datepicker-options="dateOptions"
            ng-required="true"
            close-text="Close" />

@@ -9,8 +9,8 @@ angular.module('commons', ['energimolnet'])
       addCounty: addCounty,
       getCounty: getCounty,
       getLatestConsumptionDate: getLatestConsumptionDate,
-      getFirstHourly: getFirstHourly,
-      getLastHourly: getLastHourly
+      getMinDate: getMinDate,
+      getMaxDate: getMaxDate
     };
 
     var counties = [];
@@ -62,7 +62,7 @@ angular.module('commons', ['energimolnet'])
           });
     }
 
-    function getFirstHourly(meter){
+    function getMinDate(meter){
       return emMeters.get(meter)
         .then(function(m){
           var first = m.consumption_stats.energy.day.first;
@@ -70,7 +70,7 @@ angular.module('commons', ['energimolnet'])
         });
     }
 
-    function getLastHourly(meter){
+    function getMaxDate(meter){
       return emMeters.get(meter)
         .then(function(m){
           var last = m.consumption_stats.energy.day.last;

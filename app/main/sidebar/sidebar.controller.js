@@ -43,12 +43,12 @@ angular.module('energyArtApp')
       visService.setMeter(meter._id);
       vm.selectedMeter = meter;
 
-      dataservice.getFirstHourly(meter._id).then(function(first){
-        vm.first = first;
+      dataservice.getMinDate(meter._id).then(function(date){
+        vm.minDate = date;
       });
 
-      dataservice.getLastHourly(meter._id).then(function(last){
-        vm.last = last;
+      dataservice.getMaxDate(meter._id).then(function(date){
+        vm.maxDate = date;
       });
 
       if(vm.selectedVisualizer != undefined) vm.loadVisualizer();
