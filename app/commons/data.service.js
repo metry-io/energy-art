@@ -8,7 +8,9 @@ angular.module('commons', ['energimolnet'])
       getMeters: getMeters,
       addCounty: addCounty,
       getCounty: getCounty,
-      getLatestConsumptionDate: getLatestConsumptionDate
+      getLatestConsumptionDate: getLatestConsumptionDate,
+      getMinDate: getMinDate,
+      getMaxDate: getMaxDate
     };
 
     var counties = [];
@@ -33,9 +35,15 @@ angular.module('commons', ['energimolnet'])
         .then(function (consumptions) {
           var data = consumptions[0].periods[0].energy;
           var numDays = dateDiffInDays(startDate, endDate);
+          var currentDate = new Date(startDate.getTime());
 
           for (var d = 0; d < numDays; d++) {
-            days.push(data.splice(0, 24));
+            data.splice(0, 24).forEach(function(value) {
+              days.push({date: currentDate.toISOString(), value: value});
+            });
+
+            // Increment the current date by one day
+            currentDate.setDate(currentDate.getDate() + 1);
           }
 
           return days;
@@ -52,6 +60,22 @@ angular.module('commons', ['energimolnet'])
 
           return latestDate;
           });
+    }
+
+    function getMinDate(meter){
+      return emMeters.get(meter)
+        .then(function(m){
+          var first = m.consumption_stats.energy.day.first;
+          return emDateUtil.getDate(first.toString());
+        });
+    }
+
+    function getMaxDate(meter){
+      return emMeters.get(meter)
+        .then(function(m){
+          var last = m.consumption_stats.energy.day.last;
+          return emDateUtil.getDate(last.toString());
+        });
     }
 
     function getMaxHourValue(meter) {

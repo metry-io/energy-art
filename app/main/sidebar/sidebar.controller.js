@@ -1,5 +1,5 @@
 angular.module('energyArtApp')
-  .controller('sidebarCtrl', function ($scope, $state, emAuth, meters, visualizers, visService){
+  .controller('sidebarCtrl', function ($scope, $state, emAuth, meters, visualizers, visService, dataservice){
   	var vm = this;
   	vm.visualizers = visualizers;
     vm.meters = meters;
@@ -42,6 +42,15 @@ angular.module('energyArtApp')
       console.log("selecting meter");
       visService.setMeter(meter._id);
       vm.selectedMeter = meter;
+
+      dataservice.getMinDate(meter._id).then(function(date){
+        vm.minDate = date;
+      });
+
+      dataservice.getMaxDate(meter._id).then(function(date){
+        vm.maxDate = date;
+      });
+
       if(vm.selectedVisualizer != undefined) vm.loadVisualizer();
     };
 
@@ -95,8 +104,5 @@ angular.module('energyArtApp')
       return visService.getMeter();
     };
 
-    vm.open2 = function() {
-      vm.popup2.opened = true;
-    };
 
   });

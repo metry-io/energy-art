@@ -39,8 +39,7 @@ angular
     'emAuth',
     'authConfig',
     function(auth, config){
-      //TODO: fix this
-      auth.setPrivateToken(config.privateToken);
+      if(config.privateToken != undefined) auth.setPrivateToken(config.privateToken);
     }
     ]);
 

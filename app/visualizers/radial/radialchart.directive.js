@@ -15,6 +15,10 @@ angular.module('energyArtApp')
       restrict: 'E',
       link: function (scope, ele) {
 
+        var config = {
+          scale: 15
+        };
+
         visService.init(scope, renderVis);
 
         // Handles everything that concerns the rendering
@@ -32,16 +36,25 @@ angular.module('energyArtApp')
                 .attr("width", width)
                 .attr("height", height);
 
-              var arc = d3.svg.arc();
-
               var valueScale = d3.scale.linear()
                 .domain([0, scope.max])
-                .range([0, 10]);
+                .range([0, config.scale]);
 
               var color = d3.scale.linear()
                 .clamp(true)
                 .domain([0, scope.max])
                 .range([scope.startColor, scope.endColor]);
+              var arc = d3.svg.arc()
+                .innerRadius(function(d, i){
+                    var hour = i % 24;
+                    return hour * config.scale;
+                  })
+                .outerRadius(function(d, i) {
+                  var hour = i % 24;
+                  return hour * config.scale + valueScale(d.value);
+                })
+                .startAngle(function(d, i) { return 2 * Math.PI *  ((Math.floor(i / 24) - 1) / scope.numDays); })
+                .endAngle(function(d, i) { return 2 * Math.PI * Math.floor(i / 24) / scope.numDays; });
 
               window.onresize = function () {
                 scope.$apply();
@@ -55,54 +68,37 @@ angular.module('energyArtApp')
               });
 
               scope.render = function (days) {
-                vis.selectAll("*").remove();
 
-                // it is recommended to use d3's each function for this but it was not as straightforward as one would
-                // hoped it would be to use that method. But try at least to use it on the data variable
-                days.forEach(function (data, day) {
-                  data.forEach(function (value, hour) {
-                    var ir = hour * 10,
-                      or = ir + valueScale(value),
-                      sa = 2 * Math.PI * ((day - 1) / scope.numDays),
-                      ea = 2 * Math.PI * (day / scope.numDays),
-                      scale = 1.5;
+                vis.selectAll("path")
+                  .data(days)
+                  .enter()
+                  .append("path")
+                  .attr("d", arc)
+                  .attr("fill", function(d) { return color(d.value)})
+                  .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+                  .append("title")
+                  .text(function (d) {
+                    return d.value + " kWh";
+                  });
 
-                    arc.innerRadius(ir * scale)
-                      .outerRadius(or * scale)
-                      .startAngle(sa)
-                      .endAngle(ea);
+                  /*
+                   MAKE INFO OPTIONAL
+                   vis.append("text")
+                   .attr("text-anchor", "middle")
+                   .attr("font-size", "36px")
+                   .attr("font-weight", "800")
+                   .attr("fill", "#A4A4A4")
+                   .attr("transform", "translate(500 , 40)")
+                   .text(startDate.toDateString());
 
-                    vis.append("path")
-                      .attr("d", arc)
-                      .attr("fill", color(value))
-                      .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
-                      .append("title")
-                      .text(function () {
-                        return value + " kWh";
-                      });
-
-                    /*
-                     MAKE INFO OPTIONAL
-                     vis.append("text")
-                     .attr("text-anchor", "middle")
-                     .attr("font-size", "36px")
-                     .attr("font-weight", "800")
-                     .attr("fill", "#A4A4A4")
-                     .attr("transform", "translate(500 , 40)")
-                     .text(startDate.toDateString());
-
-                     vis.append("text")
-                     .attr("text-anchor", "middle")
-                     .attr("font-size", "36px")
-                     .attr("font-weight", "800")
-                     .attr("fill", "#A4A4A4")
-                     .attr("transform", "translate(1300 , 40)")
-                     .text(endDate.toDateString());
-
-
-                     */
-                  })
-                });
+                   vis.append("text")
+                   .attr("text-anchor", "middle")
+                   .attr("font-size", "36px")
+                   .attr("font-weight", "800")
+                   .attr("fill", "#A4A4A4")
+                   .attr("transform", "translate(1300 , 40)")
+                   .text(endDate.toDateString())
+                   */
               };
             });
         }

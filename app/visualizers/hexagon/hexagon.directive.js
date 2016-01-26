@@ -54,13 +54,12 @@ angular.module('energyArtApp')
 
 
               // Increment the bin value where the current consumption value maps to
-              scope.days.forEach(function(data){
-                data.forEach(function(value, index){
-                  // We want to have an increasing consumption value going from bottom to top
-                  // therefore we index from vRes subtracted with the mapped consumption value
-                  binData[index][(vRes - 1) - scaleValue(value)] += 1;
-                  if(binData[index][(vRes - 1) - scaleValue(value)] > maxBin) maxBin = binData[index][(vRes - 1) - scaleValue(value)];
-                });
+              scope.days.forEach(function(data, index){
+                var hour = index % 24;
+                // We want to have an increasing consumption value going from bottom to top
+                // therefore we index from vRes subtracted with the mapped consumption value
+                binData[hour][(vRes - 1) - scaleValue(data.value)] += 1;
+                if(binData[hour][(vRes - 1) - scaleValue(data.value)] > maxBin) maxBin = binData[hour][(vRes - 1) - scaleValue(data.value)];
               });
 
               var color = d3.scale.log()
@@ -74,9 +73,6 @@ angular.module('energyArtApp')
               var hexagonHeight = hexagonSize * 2;
               var vDist = hexagonHeight * 3/4;
               var hDist = hexagonWidth;
-
-              var vis = d3.select(ele[0])
-                .append("svg");
 
               var xsvg = d3.select(ele[0])
                 .append("svg");

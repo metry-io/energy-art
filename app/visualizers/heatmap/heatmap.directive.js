@@ -67,58 +67,63 @@ angular.module('energyArtApp')
                     rectHeight = height / 24,
                     xOffset = 60;
 
-                  var heatmap = vis.selectAll("g")
-                    .data(days, function (d) {
-                      return d;
-                    });
+                  vis.attr("transform", function (d, i) {
+                      return "translate(" + (Math.floor(i/24) * rectWidth + xOffset) + ",0)";});
 
-                  heatmap.enter().append("g")
-                    .attr("transform", function (data, day) {
-                      return "translate(" + (day * rectWidth + xOffset) + ",0)";
-                    })
-                    .each(function (data) {
-                      var col = d3.select(this).selectAll("rect")
-                        .data(data);
+                  // Only animate if we have new data
+                  if (scope.newData) {
+                    vis.selectAll("rect")
+                      .data(days)
+                      .enter()
+                      .append("rect")
+                      .attr("class", "enter")
+                      .attr("opacity", 0)
+                      .transition().ease("linear")
+                      .delay(function (d, i) {
+                        var hour = Math.floor(i / 24);
+                        return hour * 20;
+                      })
+                      .duration(750)
+                      .attr("opacity", 1)
+                      .attr("y", function (d, i) {
+                        var hour = i % 24;
+                        return hour * rectHeight;
+                      })
+                      .attr("x", function (d, i) {
+                        var day = Math.floor(i / 24);
+                        return day * rectWidth;
+                      })
+                      .attr("width", rectWidth)
+                      .attr("height", rectHeight)
+                      .attr("fill", function (d) {
+                        return d.value == null ? 0 : color(d.value);
+                      });
+                  }
 
-                      // Only animate if we have new data
-                      if (scope.newData) {
-                        col.enter()
-                          .append("rect")
-                          .attr("class", "enter")
-                          .attr("opacity", 0)
-                          .transition().ease("linear")
-                          .delay(function (d, i) {
-                            return i * 400;
-                          })
-                          .duration(750)
-                          .attr("opacity", 1)
-                          .attr("y", function (d, i) {
-                            return i * rectHeight;
-                          })
-                          .attr("width", rectWidth)
-                          .attr("height", rectHeight)
-                          .attr("fill", function (value) {
-                            return value == null ? 0 : color(value);
-                          });
-                      }
+                  else {
+                    vis.selectAll("rect")
+                      .data(days)
+                      .enter()
+                      .append("rect")
+                      .attr("y", function (d, i) {
+                        var hour = i % 24;
+                        return hour * rectHeight;
+                      })
+                      .attr("x", function (d, i) {
+                        var day = Math.floor(i / 24);
+                        return day * rectWidth;
+                      })
+                      .attr("width", rectWidth)
+                      .attr("height", rectHeight)
+                      .attr("fill", function (d) {
+                        return d.value == null ? 0 : color(d.value);
+                      })
+                      .append("title")
+                      .text(function (d) {
+                        return d.value + " kWh";
+                      });
+                  }
 
-                      else {
-                        col.enter()
-                          .append("rect")
-                          .attr("y", function (d, i) {
-                            return i * rectHeight;
-                          })
-                          .attr("width", rectWidth)
-                          .attr("height", rectHeight)
-                          .attr("fill", function (value) {
-                            return value == null ? 0 : color(value);
-                          })
-                          .append("title")
-                          .text(function (value) {
-                            return value + " kWh";
-                          });
-                      }
-                    });
                 };
               });
             }

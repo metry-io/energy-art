@@ -13,7 +13,12 @@ angular.module('energyArtApp')
     return {
       restrict: 'E',
       link: function (scope, ele) {
+
         visService.init(scope, renderVis);
+
+        var config = {
+          scale: 40
+        };
 
         function renderVis() {
               d3Service.d3().then(function (d3) {
@@ -31,8 +36,6 @@ angular.module('energyArtApp')
                   .attr("width", width)
                   .attr("height", height);
 
-                var arc = d3.svg.arc();
-
                 var valueScale = d3.scale.linear()
                   .domain([0, scope.max])
                   .range([0, 10]);
@@ -42,6 +45,17 @@ angular.module('energyArtApp')
                   .domain([0, scope.max])
                   .range([scope.startColor, scope.endColor]);
 
+                var arc = d3.svg.arc()
+                  .innerRadius(0)
+                  .outerRadius(function(d) {
+                    return valueScale(d.value) * config.scale;
+                  })
+                  .startAngle(function(d, i) {
+                    return (i-1) * 2 * Math.PI / 24;
+                  })
+                  .endAngle(function(d, i ) {
+                    return i * 2 * Math.PI / 24;
+                  });
 
                 window.onresize = function () {
                   scope.$apply();
@@ -58,30 +72,19 @@ angular.module('energyArtApp')
                 });
 
                 scope.render = function (days) {
-                  vis.selectAll("*").remove();
 
-                  var star = vis.selectAll("g")
-                    .data(days, function(d){
-                      return d;
-                    });
+                  vis.selectAll("path")
+                    .data(days)
+                    .enter()
+                    .append("path")
+                    .attr("d", arc)
+                    .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+                    .attr("fill", function(d) {
+                      return color(d.value);
+                    })
+                    .attr("opacity", "0.05")
+                    .append("title");
 
-
-                    days.forEach(function(day){
-                      day.forEach(function(value, index){
-                        arc.innerRadius(0)
-                          .outerRadius(valueScale(value) * 40)
-                          .startAngle((index-1) * 2 * Math.PI / 24)
-                          .endAngle(index * Math.PI * 2 / 24);
-
-                        vis.append("path")
-                          .attr("d", arc)
-                          .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
-                          .attr("fill", color(value))
-                          .attr("opacity", "0.05")
-                          .append("title");
-                      });
-
-                    });
                 };
               });
             }
