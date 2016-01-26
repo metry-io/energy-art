@@ -23,7 +23,6 @@ angular.module('energyArtApp')
         function renderVis() {
               d3Service.d3().then(function (d3) {
 
-                console.log("new data");
 
                 var width = angular.element(window)[0].innerWidth,
                   height = angular.element(window)[0].innerHeight;
@@ -65,8 +64,8 @@ angular.module('energyArtApp')
                 scope.$watch(function () {
                   return angular.element(window)[0].innerWidth;
                 }, function () {
-                  width = vis.node().getBoundingClientRect().width;
-                  height = vis.node().getBoundingClientRect().height;
+                  width = angular.element(window)[0].innerWidth;
+                  height = angular.element(window)[0].innerHeight;
 
                   scope.render(scope.days);
                 });

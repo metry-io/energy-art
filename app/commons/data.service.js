@@ -45,7 +45,6 @@ angular.module('commons', ['energimolnet'])
             // Increment the current date by one day
             currentDate.setDate(currentDate.getDate() + 1);
           }
-
           return days;
         });
     }

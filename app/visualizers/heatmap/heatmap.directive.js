@@ -23,8 +23,8 @@ angular.module('energyArtApp')
 
                 console.log("new data");
 
-                var width = 0,
-                  height = 0;
+                var width = angular.element(window)[0].innerWidth,
+                  height = angular.element(window)[0].innerHeight;
 
                 // Make sure that the element i cleaned from svg's
                 d3.select(ele[0]).selectAll("svg").remove();
@@ -48,20 +48,13 @@ angular.module('energyArtApp')
                 scope.$watch(function () {
                   return angular.element(window)[0].innerWidth;
                 }, function () {
-                  width = vis.node().getBoundingClientRect().width;
-                  height = vis.node().getBoundingClientRect().height;
+                    width = angular.element(window)[0].innerWidth;
+                    height = angular.element(window)[0].innerHeight;
 
                   scope.render(scope.days);
                 });
 
                 scope.render = function (days) {
-                  // Make sure that the element i cleaned from svg's
-                  d3.select(ele[0]).selectAll("svg").remove();
-
-                  vis = d3.select(ele[0])
-                    .append("svg")
-                    .attr("width", "100%")
-                    .attr("height", "100%");
 
                   var rectWidth = width / scope.numDays,
                     rectHeight = height / 24,

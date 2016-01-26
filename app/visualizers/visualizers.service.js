@@ -115,13 +115,17 @@ angular.module('visualizers', ['energimolnet'])
       // Watch for parameters updated event and update the visualisation as soon as there is a change
       scope.$on('parameters:updated',
         function(event, parameters) {
+          $rootScope.$emit("loadingData");
           service.update(scope, renderVis, parameters);
         });
 
     };
 
     service.update = function(scope, renderVis, parameters) {
+
+
       if( parametersOK(parameters) ) {
+
         // Initialize all the parameters to the current scope
         scope.newData = parameters.newData;
         scope.startDate = new Date(parameters.startDate);
@@ -137,11 +141,15 @@ angular.module('visualizers', ['energimolnet'])
             service.days = d;
             scope.days = d;
 
+
             dataservice.getMaxHourValue(scope.meter).then(function (d) {
+              $rootScope.$emit("successData");
               service.max = d;
               scope.max = d;
+            }).finally(function() {
               renderVis();
             });
+
 
             parameters.newData = false;
           });
@@ -149,8 +157,11 @@ angular.module('visualizers', ['energimolnet'])
         else {
           scope.days = service.days;
           scope.max = service.max;
+          $rootScope.$emit("successData");
           renderVis();
+
         }
+
       }
     };
 

@@ -9,7 +9,7 @@
  */
 
 angular.module('energyArtApp')
-  .directive('radialChart', ['d3Service', 'dataservice', 'visService', function (d3Service, dataservice, visService) {
+  .directive('radialChart', ['$rootScope', 'd3Service', 'dataservice', 'visService', function ($rootScope, d3Service, dataservice, visService) {
     // Runs during compile
     return {
       restrict: 'E',
@@ -44,6 +44,7 @@ angular.module('energyArtApp')
                 .clamp(true)
                 .domain([0, scope.max])
                 .range([scope.startColor, scope.endColor]);
+
               var arc = d3.svg.arc()
                 .innerRadius(function(d, i){
                     var hour = i % 24;
@@ -99,6 +100,7 @@ angular.module('energyArtApp')
                    .attr("transform", "translate(1300 , 40)")
                    .text(endDate.toDateString())
                    */
+
               };
             });
         }
