@@ -1,0 +1,43 @@
+<div class="time">
+  <label>Start</label>
+
+  <p class="input-group">
+    <input ng-model="startDate"
+           ng-change="sidebar.setStartDate(startDate)"
+           name="startDate"
+           type="text"
+           class="form-control"
+           uib-datepicker-popup
+           is-open="sidebar.startDate.opened"
+           min-date="sidebar.minDate"
+           max-date="sidebar.maxDate"
+           datepicker-options="dateOptions"
+           ng-required="true"
+           close-text="Close" />
+
+    <span class="input-group-btn">
+      <button type="button" class="btn btn-default" ng-click="sidebar.openStartDate()"><i class="glyphicon glyphicon-calendar"></i></button>
+    </span>
+  </p>
+
+  <label>End</label>
+
+  <p class="input-group">
+    <input ng-model="endDate"
+           ng-change="sidebar.setEndDate(endDate)"
+           name="endDate"
+           type="text"
+           class="form-control"
+           uib-datepicker-popup
+           is-open="sidebar.endDate.opened"
+           min-date="sidebar.minDate"
+           max-date="sidebar.maxDate"
+           datepicker-options="dateOptions"
+           ng-required="true"
+           close-text="Close" />
+
+    <span class="input-group-btn">
+      <button type="button" class="btn btn-default" ng-click="sidebar.openEndDate()"><i class="glyphicon glyphicon-calendar"></i></button>
+    </span>
+  </p>
+</div>

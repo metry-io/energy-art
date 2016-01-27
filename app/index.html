@@ -11,10 +11,14 @@
     <!-- bower:css -->
     <link rel='stylesheet' href='bower_components/bootstrap/dist/css/bootstrap.css' />
     <link rel='stylesheet' href='bower_components/angular-spinkit/build/angular-spinkit.min.css' />
+    <link rel='stylesheet' href='bower_components/ui-select/dist/select.css' />
+    <link rel='stylesheet' href='bower_components/spectrum/spectrum.css' />
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/energyart.css">
+    <link rel="stylesheet" href="styles/sp-dark.css">
     <!-- endbuild -->
     <!-- fonts -->
     <link href='https://fonts.googleapis.com/css?family=Play:400,700' rel='stylesheet' type='text/css'>
@@ -46,6 +50,8 @@
        ga('send', 'pageview');
     </script>
 
+    <script src="http://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
     <script src="bower_components/jquery/dist/jquery.js"></script>
@@ -62,16 +68,17 @@
     <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
     <script src="bower_components/angular-spinkit/build/angular-spinkit.js"></script>
     <script src="bower_components/d3/d3.js"></script>
-    <script src="bower_components/topojson/topojson.js"></script>
+    <script src="bower_components/ui-select/dist/select.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/spectrum/spectrum.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
         <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="commons/commons.service.js"></script>
         <script src="commons/data.service.js"></script>
 
         <script src="app.js"></script>
-        <script src="appConstatConfig.js"></script>
+        <script src="appConstantConfig.js"></script>
 
         <script src="main/main.state.js"></script>
 
@@ -79,9 +86,9 @@
         <script src="main/auth/auth.state.js"></script>
 
         <script src="commons/loader/loader.directive.js"></script>
+        <script src="commons/colorpicker/spectrum.directive.js"></script>
 
         <script src="main/sidebar/sidebar.state.js"></script>
-        <script src="main/sidebar/sidebar.directive.js"></script>
         <script src="main/sidebar/sidebar.controller.js"></script>
 
         <script src="visualizers/visualizers.service.js"></script>
@@ -89,15 +96,22 @@
 
         <script src="visualizers/radial/radialchart.state.js"></script>
         <script src="visualizers/radial/radialchart.ctrl.js"></script>
+        <script src="visualizers/radial/radialchart.directive.js"></script>
 
         <script src="visualizers/heatmap/heatmap.state.js"></script>
-        <script src="visualizers/heatmap/heatmap.ctrl.js"></script>
+        <script src="visualizers/heatmap/heatmap.directive.js"></script>
 
         <script src="visualizers/hexagon/hexagon.state.js"></script>
         <script src="visualizers/hexagon/hexagon.directive.js"></script>
 
         <script src="visualizers/geomap/geomap.state.js"></script>
         <script src="visualizers/geomap/geomap.directive.js"></script>
+
+        <script src="visualizers/star/star.state.js"></script>
+        <script src="visualizers/star/star.directive.js"></script>
+
+        <script src="visualizers/circle_packing/circle_packing.directive.js"></script>
+        <script src="visualizers/circle_packing/circle_packing.state.js"></script>
 
         <script src="scripts/services/d3service.js"></script>
         <!-- endbuild -->

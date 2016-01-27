@@ -2,9 +2,9 @@
 
 /**
  * @ngdoc directive
- * @name energyArtApp.hexagon.directive
+ * @name energyArtApp.geomap.directive
  * @description
- * # hexagon.directive
+ * # geomap.directive
  * Factory in the energyArtApp.
  */
 
@@ -15,11 +15,16 @@ angular.module('energyArtApp')
       scope: {
       },
       restrict: 'E',
-      link: function(scope, ele) {
+      link: function(scope, ele, attr) {
 
-        dataservice.getMeterDayData(visService.meter).then(function(d){
+        var startDate = new Date(attr.startDate),
+          endDate = new Date(attr.endDate);
+
+        dataservice.getMeterDayData(visService.meter, startDate, endDate).then(function(d){
           scope.days = d;
         });
+
+        dataservice.addCounty(visService.meter.address);
 
         scope.$watch('days', function(days){
 
@@ -48,7 +53,6 @@ angular.module('energyArtApp')
                 s = .95 / Math.max((b[1][0] - b[0][0]) / width, (b[1][1] - b[0][1]) / height),
                 t = [(width - s * (b[1][0] + b[0][0])) / 2, (height - s * (b[1][1] + b[0][1])) / 2];
 
-              console.log(s + " " + t);
               projection.scale(s).translate(t);
 
               window.onresize = function() {
@@ -67,7 +71,9 @@ angular.module('energyArtApp')
 
 
             scope.render = function(map){
+
               d3.select(ele[0]).selectAll("svg").remove();
+
               var vis = d3.select(ele[0]).append("svg")
                 .attr("width", width)
                 .attr("height", height);
@@ -77,8 +83,6 @@ angular.module('energyArtApp')
                 .enter().append('path')
                 .attr('class', function(d) { return 'munic munic--' + d.properties.KNKOD; })
                 .attr('d', d3.geo.path().projection(projection));
-
-              console.log(map.subunits.features);
 
               vis.append("g")
                 .attr("class", "bubble")

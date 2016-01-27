@@ -23,7 +23,8 @@ angular
     'commons',
     'visualizers',
     'angular-spinkit',
-    'd3'
+    'd3',
+    'ui.select'
   ])
   .config(function ($stateProvider, $urlRouterProvider) {
     $urlRouterProvider.otherwise('/');
@@ -32,3 +33,19 @@ angular
 
 angular
   .module('energyArtApp').constant('apiBaseUrl', 'https://app.metry.io/');
+
+angular
+  .module('energyArtApp').run([
+    'emAuth',
+    'authConfig',
+    function(auth, config){
+      if(config.privateToken != undefined) auth.setPrivateToken(config.privateToken);
+    }
+    ]);
+
+
+//Make sure that we track errors on ui-router
+angular.module('energyArtApp').run(['$rootScope',
+    function($rootScope){
+  $rootScope.$on("$stateChangeError", console.log.bind(console));
+}]);

@@ -6,3 +6,4 @@
 /.idea
 /.vscode
 /typings
+/app/appConstantConfig.js
