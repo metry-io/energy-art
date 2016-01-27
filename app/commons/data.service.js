@@ -20,7 +20,7 @@ angular.module('commons', ['energimolnet'])
     //////////////////////////////////////////////////////////////////
 
     function getMeters() {
-      var meters = emMeters.query().then(function (res) {
+      var meters = emMeters.query({box: 'active', 'consumption_stats.energy.hour.count': '>0'}).then(function (res) {
         var meters = res.data;
         return meters;
       });

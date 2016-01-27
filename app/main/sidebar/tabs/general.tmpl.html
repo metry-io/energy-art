@@ -1,5 +1,5 @@
 
-<label for="meterInput">Select Meter</label>
+<label for="meterInput">Select Meter with hourly values</label>
 <ui-select ng-init="sidebar.getMeter()" ng-model="selectedMeter" id="meterInput" ng-change="sidebar.selectMeter(selectedMeter)">
   <ui-select-match>
     <span ng-bind="$select.selected.address"></span>
@@ -8,6 +8,8 @@
     <span ng-bind="meter.address"></span>
   </ui-select-choices>
 </ui-select>
+<small>The list of meters only contain active meters with hourly values.</small> 
+<br><br>
 
 <div class="form-group">
   <label for="visualizerInput">Select Visualizer</label>
