@@ -45,7 +45,21 @@ angular
 
 
 //Make sure that we track errors on ui-router
-angular.module('energyArtApp').run(['$rootScope',
-    function($rootScope){
-  $rootScope.$on("$stateChangeError", console.log.bind(console));
+angular.module('energyArtApp').run(['$rootScope', '$state', 'emAuth',
+    function($rootScope, $state, emAuth) {
+
+      // On state change Error, handle authentication
+  $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams, err) {
+      var code = getURLParameter('code');
+
+      if(!emAuth.isAuthenticated() && code == null || code == ""){
+        $state.go('auth');
+      }
+      else if(!emAuth.isAuthenticated() && code !== ""){
+        emAuth.handleAuthCode(code).then(function(){
+          $state.go('sidebar');
+        });
+      }
+
+  });
 }]);
