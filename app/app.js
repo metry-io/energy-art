@@ -11,6 +11,7 @@
 
 angular
   .module('energyArtApp', [
+    'twitterShare',
     'ngAnimate',
     'ngCookies',
     'ngResource',

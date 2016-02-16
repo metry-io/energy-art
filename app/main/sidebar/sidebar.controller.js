@@ -1,5 +1,5 @@
 angular.module('energyArtApp')
-  .controller('sidebarCtrl', function ($scope, $state, emAuth, meters, visualizers, visService, dataservice){
+  .controller('sidebarCtrl', function ($scope, $state, emAuth, meters, visualizers, visService, dataservice, twitterShareService){
   	var vm = this;
   	vm.visualizers = visualizers;
     vm.meters = meters;
@@ -16,22 +16,32 @@ angular.module('energyArtApp')
       {
         icon: "glyphicon-flash",
         name: "general",
-        template: "main/sidebar/tabs/general.tmpl.html"
+        template: "main/sidebar/tabs/general.tmpl.html",
+        content: true
       },
       {
         icon: "glyphicon-time",
         name: "time",
-        template: "main/sidebar/tabs/time.tmpl.html"
+        template: "main/sidebar/tabs/time.tmpl.html",
+        content: true
       },
       {
         icon: "glyphicon-pencil",
         name: "color",
-        template: "main/sidebar/tabs/color.tmpl.html"
+        template: "main/sidebar/tabs/color.tmpl.html",
+        content: true
       },
       {
         icon: "glyphicon-log-out",
         name: "logout",
-        template: "main/sidebar/tabs/logout.tmpl.html"
+        template: "main/sidebar/tabs/logout.tmpl.html",
+        content: false
+      },
+      {
+        icon: "glyphicon glyphicon-tower",
+        name: "twitter",
+        template: "main/sidebar/tabs/twitter.tmpl.html",
+        content: false
       }
     ];
 
@@ -55,14 +65,11 @@ angular.module('energyArtApp')
     };
 
     vm.selectVisualizer = function(visualizer){
-      console.log(visualizer);
-      //visService.visualizer = visualizer;
       vm.selectedVisualizer = visualizer;
       if(vm.selectedMeter != undefined) vm.loadVisualizer();
     };
 
     vm.loadVisualizer = function(){
-      console.log(vm.selectedVisualizer.url);
       $state.go(vm.selectedVisualizer.url);
     };
 

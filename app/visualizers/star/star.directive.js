@@ -5,11 +5,11 @@
  * @name energyArtApp.star.directive
  * @description
  * # star.directive
- * Factory in the energyArtApp.
+ *
  */
 
 angular.module('energyArtApp')
-  .directive('star', ['d3Service', 'dataservice', 'visService', function (d3Service, dataservice, visService) {
+  .directive('star', ['d3Service', 'dataservice', 'visService', 'twitterShareService', function (d3Service, dataservice, visService, ts) {
     return {
       restrict: 'E',
       link: function (scope, ele) {
@@ -23,7 +23,6 @@ angular.module('energyArtApp')
         function renderVis() {
               d3Service.d3().then(function (d3) {
 
-
                 var width = angular.element(window)[0].innerWidth,
                   height = angular.element(window)[0].innerHeight;
 
@@ -33,7 +32,8 @@ angular.module('energyArtApp')
                 var vis = d3.select(ele[0])
                   .append("svg")
                   .attr("width", width)
-                  .attr("height", height);
+                  .attr("height", height)
+                  .attr("id", "visualization");
 
                 var valueScale = d3.scale.linear()
                   .domain([0, scope.max])
@@ -83,6 +83,8 @@ angular.module('energyArtApp')
                     })
                     .attr("opacity", "0.05")
                     .append("title");
+
+                    ts.svg2png(width, height);
 
                 };
               });

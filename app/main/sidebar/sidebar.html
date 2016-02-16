@@ -9,7 +9,7 @@
                 class="btn btn-block btn-tab"
                 ng-class="tab.name == sidebar.activeTab ? 'active' : ''"
                 ng-click="(tab.name == 'logout') ? sidebar.logOut():''"
-                ng-mouseenter="(tab.name != 'logout' && tab.name != sidebar.activeTab) ? sidebar.toggleActiveTab(tab.name):''">
+                ng-mouseenter="(tab.content && tab.name != sidebar.activeTab) ? sidebar.toggleActiveTab(tab.name):''">
 
           <span class="glyphicon {{tab.icon}} sidebar-tab"></span>
           <br>
@@ -32,3 +32,5 @@
 
 <gln-loader class="loader"></gln-loader>
 <ui-view ng-show="!isStateLoading && !rendering"></ui-view>
+<div id="pngcon"></div>
+
