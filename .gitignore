@@ -7,3 +7,4 @@
 /.vscode
 /typings
 /app/appConstantConfig.js
+/app/config/config.json

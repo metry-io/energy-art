@@ -74,8 +74,9 @@ angular.module('energyArtApp')
     };
 
     vm.logOut = function(){
-      emAuth.setRefreshToken(null);
-      $state.go('auth');
+      twitterShareService.svg2png(1920, 1080);
+      //emAuth.setRefreshToken(null);
+      //$state.go('auth');
     };
 
     vm.toggleActiveTab = function(tab){

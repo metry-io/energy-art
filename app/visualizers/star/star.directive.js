@@ -84,7 +84,7 @@ angular.module('energyArtApp')
                     .attr("opacity", "0.05")
                     .append("title");
 
-                    ts.svg2png(width, height);
+                    ts.share();
 
                 };
               });

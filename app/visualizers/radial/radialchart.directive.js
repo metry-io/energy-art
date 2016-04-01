@@ -33,6 +33,7 @@ angular.module('energyArtApp')
 
               var vis = d3.select(ele[0])
                 .append("svg")
+                .attr("class", "visualization")
                 .attr("width", width)
                 .attr("height", height);
 
