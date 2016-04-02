@@ -1,10 +1,12 @@
 angular.module('energyArtApp')
-  .controller('sidebarCtrl', function ($scope, $state, emAuth, meters, visualizers, visService, dataservice, twitterShareService){
-  	var vm = this;
-  	vm.visualizers = visualizers;
+  .controller('sidebarCtrl', function ($scope, $state, emAuth, meters, visualizers, visService, dataservice, twitterShareService) {
+    var vm = this;
+    vm.visualizers = visualizers;
     vm.meters = meters;
     visService.meter = vm.meter;
     vm.activeTab = "none";
+    vm.twitterShare = twitterShareService.share;
+
     vm.startDate = {
       opened: false
     };
@@ -35,80 +37,83 @@ angular.module('energyArtApp')
         icon: "glyphicon-log-out",
         name: "logout",
         template: "main/sidebar/tabs/logout.tmpl.html",
-        content: false
+        content: false,
+        hasAction: true,
+        action: logOut
       },
       {
         icon: "glyphicon glyphicon-tower",
         name: "twitter",
         template: "main/sidebar/tabs/twitter.tmpl.html",
-        content: false
+        content: false,
+        hasAction: true,
+        action: twitterShareService.share
       }
     ];
 
 
     //////////////////////////////////////////////////////////////////
 
-    vm.selectMeter = function(meter){
+    vm.selectMeter = function (meter) {
       console.log("selecting meter");
       visService.setMeter(meter._id);
       vm.selectedMeter = meter;
 
-      dataservice.getMinDate(meter._id).then(function(date){
+      dataservice.getMinDate(meter._id).then(function (date) {
         vm.minDate = date;
       });
 
-      dataservice.getMaxDate(meter._id).then(function(date){
+      dataservice.getMaxDate(meter._id).then(function (date) {
         vm.maxDate = date;
       });
 
-      if(vm.selectedVisualizer != undefined) vm.loadVisualizer();
+      if (vm.selectedVisualizer != undefined) vm.loadVisualizer();
     };
 
-    vm.selectVisualizer = function(visualizer){
+    vm.selectVisualizer = function (visualizer) {
       vm.selectedVisualizer = visualizer;
-      if(vm.selectedMeter != undefined) vm.loadVisualizer();
+      if (vm.selectedMeter != undefined) vm.loadVisualizer();
     };
 
-    vm.loadVisualizer = function(){
+    vm.loadVisualizer = function () {
       $state.go(vm.selectedVisualizer.url);
     };
 
-    vm.logOut = function(){
-      twitterShareService.svg2png(1920, 1080);
-      //emAuth.setRefreshToken(null);
-      //$state.go('auth');
+    function logOut() {
+      emAuth.setRefreshToken(null);
+      $state.go('auth');
     };
 
-    vm.toggleActiveTab = function(tab){
-      if(vm.activeTab == tab) vm.activeTab = "none";
+    vm.toggleActiveTab = function (tab) {
+      if (vm.activeTab == tab) vm.activeTab = "none";
       else vm.activeTab = tab;
     };
 
-    vm.openStartDate = function(){
+    vm.openStartDate = function () {
       vm.startDate.opened = true;
     };
 
-    vm.openEndDate = function(){
+    vm.openEndDate = function () {
       vm.endDate.opened = true;
     };
 
-    vm.setStartDate = function(date){
+    vm.setStartDate = function (date) {
       visService.setStartDate(date);
     };
 
-    vm.setEndDate = function(date) {
+    vm.setEndDate = function (date) {
       visService.setEndDate(date);
     };
 
-    vm.setStartColor = function(color){
+    vm.setStartColor = function (color) {
       visService.setStartColor(color);
     };
 
-    vm.setEndColor = function(color) {
+    vm.setEndColor = function (color) {
       visService.setEndColor(color);
     };
 
-    vm.getMeter = function() {
+    vm.getMeter = function () {
       return visService.getMeter();
     };
 
