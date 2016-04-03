@@ -18,14 +18,15 @@ angular.module("twitterShare", [])
 
     return {
       share: function () {
+        console.log("starting share");
         svg2png($q, getWidth(), getHeight()).then(function (res) {
+          console.log("here");
           return uploadToImgur($http, res);
         }).then(function (res) {
-            var a = document.getElementById("twitterShare");
-          a.id="tempTwitter";
+            var a = document.getElementById("twitter-share-btn");
+            a.id = "twitter-share-btn";
             a.href = "https://twitter.com/intent/tweet?url=" + encodeURI(res);
-            document.body.appendChild(a);
-            document.getElementById("tempTwitter").click();
+            a.click();
           })
           .catch(function (err) {
             console.log(err);
@@ -48,12 +49,15 @@ angular.module("twitterShare", [])
  * @returns {IPromise<T>}
  */
 function svg2png($q, width, height) {
-
   var defer = $q.defer();
 
+  console.log("hereis");
   var config = {
     svgId: "visualization"
   };
+
+  console.log("width", width);
+  console.log("height", height);
 
   var svg = document.getElementById(config.svgId);
   var canvas = document.createElement('canvas');
@@ -67,7 +71,6 @@ function svg2png($q, width, height) {
 
   var context = canvas.getContext("2d");
 
-
   var image = new Image();
   image.src = imgSrc;
 
@@ -75,7 +78,6 @@ function svg2png($q, width, height) {
 
   image.onload = function () {
     context.drawImage(image, 0, 0, canvas.width, canvas.height);
-    context.fillStyle = "#000000";
     imageData = canvas.toDataURL();
 
     if (imageData !== undefined) defer.resolve(imageData);
@@ -85,6 +87,13 @@ function svg2png($q, width, height) {
   return defer.promise;
 }
 
+function getConfig($http) {
+  return $http.get('/config/config.json')
+    .then(function (res) {
+      return res.data;
+    });
+}
+
 /**
  * Simply upload a base64 image to imgur and returns the url to the image
  *
@@ -92,14 +101,12 @@ function svg2png($q, width, height) {
  * @param image
  */
 function uploadToImgur($http, image) {
-  return $http.get('/config/config.json')
-    .then(function (res) {
-      return res.data;
-    })
-    .then(function (config) {
-      // We only want what is behind the type definition
-      image = image.split(',')[1];
 
+  // We only want what is behind the type definition
+  image = image.split(',')[1];
+
+  return getConfig($http)
+    .then(function (config) {
       return $http({
         method: 'POST',
         url: 'https://api.imgur.com/3/image',
@@ -110,11 +117,12 @@ function uploadToImgur($http, image) {
           image: image,
           type: 'base64'
         }
-      }).then(function (res) {
-        return "http://i.imgur.com/" + res.data.data.id;
-      }).catch(function (err) {
-        console.log(err);
-      })
+      });
+    })
+    .then(function (res) {
+      return "http://i.imgur.com/" + res.data.data.id;
+    }).catch(function (err) {
+      console.log(err);
     });
 }
 

@@ -396,10 +396,6 @@ NAVBAR
 VISUALIZERS
 -----------------------------------------------------------*/
 
-#visualization svg {
-  fill: black;
-}
-
 .star path {
   stroke: white;
   stroke-opacity: 0.3;
@@ -412,6 +408,20 @@ VISUALIZERS
 
 .leaf circle {
   fill-opacity: 1;
+}
+
+#twitter-share-btn {
+  background: #55acee;
+  position: absolute;
+  bottom: 0;
+  right:0;
+
+  z-index: 10000;
+  margin: 20px;
+}
+
+#pngcon {
+  display: none;
 }
 
 /*--------------------------------------------------------

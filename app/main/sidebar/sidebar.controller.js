@@ -40,14 +40,6 @@ angular.module('energyArtApp')
         content: false,
         hasAction: true,
         action: logOut
-      },
-      {
-        icon: "glyphicon glyphicon-tower",
-        name: "twitter",
-        template: "main/sidebar/tabs/twitter.tmpl.html",
-        content: false,
-        hasAction: true,
-        action: twitterShareService.share
       }
     ];
 

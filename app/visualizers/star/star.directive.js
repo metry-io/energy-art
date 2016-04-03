@@ -38,7 +38,7 @@ angular.module('energyArtApp')
             vis.append("rect")
               .attr("width", width)
               .attr("height", height)
-              .attr("fill", "#000000");
+              .attr("fill", "#161616");
 
             var valueScale = d3.scale.linear()
               .domain([0, scope.max])
@@ -91,6 +91,7 @@ angular.module('energyArtApp')
 
               // We update the dimensions to enable correct ratio when sharing the image
               ts.setDimensions(width, height);
+              scope.rendered = true;
             };
           });
         }
