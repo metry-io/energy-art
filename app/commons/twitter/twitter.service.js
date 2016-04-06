@@ -3,8 +3,7 @@
  */
 
 angular.module("twitterShare", [])
-  .factory("twitterShareService", ['$http', '$q', '$location', function ($http, $q, $location) {
-
+  .factory("twitterShareService", ['$http', '$q', '$timeout', function ($http, $q, $timeout) {
     var width = 0;
     var height = 0;
 
@@ -18,15 +17,17 @@ angular.module("twitterShare", [])
 
     return {
       share: function () {
-        console.log("starting share");
         svg2png($q, getWidth(), getHeight()).then(function (res) {
-          console.log("here");
           return uploadToImgur($http, res);
         }).then(function (res) {
             var a = document.getElementById("twitter-share-btn");
             a.id = "twitter-share-btn";
             a.href = "https://twitter.com/intent/tweet?url=" + encodeURI(res);
-            a.click();
+
+            // We use a timeout to get out of the digest loop, without this it will throw an error
+            $timeout(function () {
+              angular.element(a).triggerHandler('click')
+            }, 0);
           })
           .catch(function (err) {
             console.log(err);
@@ -51,13 +52,9 @@ angular.module("twitterShare", [])
 function svg2png($q, width, height) {
   var defer = $q.defer();
 
-  console.log("hereis");
   var config = {
     svgId: "visualization"
   };
-
-  console.log("width", width);
-  console.log("height", height);
 
   var svg = document.getElementById(config.svgId);
   var canvas = document.createElement('canvas');
@@ -77,6 +74,7 @@ function svg2png($q, width, height) {
   var imageData;
 
   image.onload = function () {
+    // We need to draw the image to get correct data url
     context.drawImage(image, 0, 0, canvas.width, canvas.height);
     imageData = canvas.toDataURL();
 
@@ -90,7 +88,7 @@ function svg2png($q, width, height) {
 function getConfig($http) {
   return $http.get('/config/config.json')
     .then(function (res) {
-      return res.data;
+      return res.data.twitter;
     });
 }
 

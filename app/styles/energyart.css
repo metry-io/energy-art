@@ -411,6 +411,8 @@ VISUALIZERS
 }
 
 #twitter-share-btn {
+  font-family: Gotham, sans-serif;
+  font-weight: 800;
   background: #55acee;
   position: absolute;
   bottom: 0;
