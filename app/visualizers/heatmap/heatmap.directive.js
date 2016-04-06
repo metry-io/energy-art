@@ -61,9 +61,16 @@ angular.module('energyArtApp')
                 rectHeight = height / 24,
                 xOffset = 1000;
 
+              vis .attr("width", width)
+                .attr("height", height)
+                .attr("fill", "#161616");
+
               vis.attr("transform", function (d, i) {
                 return "translate(" + (Math.floor(i / 24) * rectWidth + xOffset) + ",0)";
               });
+
+              // force update...
+              vis.selectAll("rect").remove();
 
               // Only animate if we have new data
               if (scope.newData) {

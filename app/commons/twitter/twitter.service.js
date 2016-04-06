@@ -3,7 +3,7 @@
  */
 
 angular.module("twitterShare", [])
-  .factory("twitterShareService", ['$http', '$q', '$timeout', function ($http, $q, $timeout) {
+  .factory("twitterShareService", ['$http', '$q', '$timeout', 'twitterConfig', function ($http, $q, $timeout, config) {
     var width = 0;
     var height = 0;
 
@@ -18,7 +18,7 @@ angular.module("twitterShare", [])
     return {
       share: function () {
         svg2png($q, getWidth(), getHeight()).then(function (res) {
-          return uploadToImgur($http, res);
+          return uploadToImgur($http, res, config);
         }).then(function (res) {
             var a = document.createElement("a");
             a.href = "https://twitter.com/intent/tweet?url=" + encodeURI(res);
@@ -89,12 +89,6 @@ function svg2png($q, width, height) {
   return defer.promise;
 }
 
-function getConfig($http) {
-  return $http.get('/config/config.json')
-    .then(function (res) {
-      return res.data.twitter;
-    });
-}
 
 /**
  * Simply upload a base64 image to imgur and returns the url to the image
@@ -102,26 +96,22 @@ function getConfig($http) {
  * @param $http
  * @param image
  */
-function uploadToImgur($http, image) {
+function uploadToImgur($http, image, config) {
 
   // We only want what is behind the type definition
   image = image.split(',')[1];
 
-  return getConfig($http)
-    .then(function (config) {
-      return $http({
-        method: 'POST',
-        url: 'https://api.imgur.com/3/image',
-        headers: {
-          Authorization: "Client-ID " + config.client_id
-        },
-        data: {
-          image: image,
-          type: 'base64'
-        }
-      });
-    })
-    .then(function (res) {
+  return $http({
+    method: 'POST',
+    url: 'https://api.imgur.com/3/image',
+    headers: {
+      Authorization: "Client-ID " + config.client_id
+    },
+    data: {
+      image: image,
+      type: 'base64'
+    }
+  }).then(function (res) {
       return "http://i.imgur.com/" + res.data.data.id;
     }).catch(function (err) {
       console.log(err);

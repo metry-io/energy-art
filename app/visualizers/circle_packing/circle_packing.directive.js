@@ -102,6 +102,9 @@ angular.module('energyArtApp')
 
             scope.render = function (data) {
 
+              // force update...
+              vis.selectAll(".node").remove();
+
               var node = vis.datum(data).selectAll(".node")
                 .data(pack.nodes)
                 .enter().append("g")

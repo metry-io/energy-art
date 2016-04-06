@@ -35,11 +35,6 @@ angular.module('energyArtApp')
               .attr("height", height)
               .attr("id", "visualization");
 
-            vis.append("rect")
-              .attr("width", width)
-              .attr("height", height)
-              .attr("fill", "#161616");
-
             var valueScale = d3.scale.linear()
               .domain([0, scope.max])
               .range([0, 10]);
@@ -76,6 +71,13 @@ angular.module('energyArtApp')
             });
 
             scope.render = function (days) {
+
+              vis .attr("width", width)
+                .attr("height", height)
+                .attr("fill", "#161616");
+
+              // force update...
+              vis.selectAll("path").remove();
 
               vis.selectAll("path")
                 .data(days)
