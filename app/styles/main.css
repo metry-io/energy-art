@@ -14,7 +14,7 @@ html, body {
   padding: 0;
   height: 100%;
   background: #161616;
-  color: #A4A4A4;
+  color:#A4A4A4;
   font-family: 'Play', sans-serif;
 }
 
@@ -30,7 +30,6 @@ html, body {
 .header {
   border-bottom: 1px solid #e5e5e5;
 }
-
 /* Make the masthead heading the same height as the navigation */
 .header h3 {
   margin-top: 0;
@@ -54,7 +53,6 @@ html, body {
   text-align: center;
   border-bottom: 1px solid #e5e5e5;
 }
-
 .jumbotron .btn {
   font-size: 21px;
   padding: 14px 24px;
@@ -64,7 +62,6 @@ html, body {
 .marketing {
   margin: 40px 0;
 }
-
 .marketing p + h4 {
   margin-top: 28px;
 }
@@ -82,7 +79,6 @@ html, body {
     padding-left: 0;
     padding-right: 0;
   }
-
   /* Remove the bottom border on the jumbotron for visual effect */
   .jumbotron {
     border-bottom: 0;
