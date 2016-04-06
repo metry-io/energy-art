@@ -6,4 +6,5 @@
 /.idea
 /.vscode
 /typings
-/app/appConstantConfig.js
+#/app/appConstantConfig.js
+Gruntfile.js

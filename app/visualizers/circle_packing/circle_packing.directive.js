@@ -9,7 +9,7 @@
  */
 
 angular.module('energyArtApp')
-  .directive('circlePacking', ['d3Service', 'visService', function (d3Service, visService) {
+  .directive('circlePacking', ['d3Service', 'visService', 'twitterShareService', function (d3Service, visService, ts) {
     return {
       restrict: 'E',
       link: function (scope, ele) {
@@ -22,8 +22,6 @@ angular.module('energyArtApp')
 
         function renderVis(){
           d3Service.d3().then(function (d3) {
-
-            console.log("new data");
 
             var width = 0,
               height = 0;
@@ -71,10 +69,9 @@ angular.module('energyArtApp')
 
             });
 
-            console.log(data);
-
             var vis = d3.select(ele[0])
               .append("svg")
+              .attr("id", "visualization")
               .attr("width", config.diameter)
               .attr("height", config.diameter)
               .append("g")
@@ -105,6 +102,9 @@ angular.module('energyArtApp')
 
             scope.render = function (data) {
 
+              // force update...
+              vis.selectAll(".node").remove();
+
               var node = vis.datum(data).selectAll(".node")
                 .data(pack.nodes)
                 .enter().append("g")
@@ -114,6 +114,9 @@ angular.module('energyArtApp')
 
               node.append("circle")
                 .attr("r", function(d) { return d.r; });
+
+              ts.setDimensions(width, height);
+              scope.rendered = true;
 
             };
           });

@@ -11,6 +11,7 @@
 
 angular
   .module('energyArtApp', [
+    'twitterShare',
     'ngAnimate',
     'ngCookies',
     'ngResource',
@@ -36,30 +37,30 @@ angular
 
 angular
   .module('energyArtApp').run([
-    'emAuth',
-    'authConfig',
-    function(auth, config){
-      if(config.privateToken != undefined) auth.setPrivateToken(config.privateToken);
-    }
-    ]);
+  'emAuth',
+  'authConfig',
+  function (auth, config) {
+    if (config.privateToken != undefined) auth.setPrivateToken(config.privateToken);
+  }
+]);
 
 
 //Make sure that we track errors on ui-router
 angular.module('energyArtApp').run(['$rootScope', '$state', 'emAuth',
-    function($rootScope, $state, emAuth) {
+  function ($rootScope, $state, emAuth) {
 
-      // On state change Error, handle authentication
-  $rootScope.$on("$stateChangeError", function(event, toState, toParams, fromState, fromParams, err) {
+    // On state change Error, handle authentication
+    $rootScope.$on("$stateChangeError", function (event, toState, toParams, fromState, fromParams, err) {
       var code = getURLParameter('code');
 
-      if(!emAuth.isAuthenticated() && code == null || code == ""){
+      if (!emAuth.isAuthenticated() && code == null || code == "") {
         $state.go('auth');
       }
-      else if(!emAuth.isAuthenticated() && code !== ""){
-        emAuth.handleAuthCode(code).then(function(){
+      else if (!emAuth.isAuthenticated() && code !== "") {
+        emAuth.handleAuthCode(code).then(function () {
           $state.go('sidebar');
         });
       }
 
-  });
-}]);
+    });
+  }]);
