@@ -1,4 +1,4 @@
-<div class="sidebar">
+<div class="sidebar" >
 
   <div class="sidebar-tabs" ng-mouseleave="sidebar.activeTab = undefined">
 
@@ -8,8 +8,8 @@
         <button type="button"
                 class="btn btn-block btn-tab"
                 ng-class="tab.name == sidebar.activeTab ? 'active' : ''"
-                ng-click="(tab.hasAction) ? tab.action():''"
-                ng-mouseenter="(tab.content && tab.name != sidebar.activeTab) ? sidebar.toggleActiveTab(tab.name):''">
+                ng-click="(tab.name == 'logout') ? sidebar.logOut():''"
+                ng-mouseenter="(tab.name != 'logout' && tab.name != sidebar.activeTab) ? sidebar.toggleActiveTab(tab.name):''">
 
           <span class="glyphicon {{tab.icon}} sidebar-tab"></span>
           <br>
@@ -20,7 +20,7 @@
         <!-- padding top 20 px, size of tabs ? -->
         <div ng-show="tab.name == sidebar.activeTab"
              class="sidebar-component">
-          <div ng-include src="tab.template"></div>
+          <div ng-include src="tab.template" ></div>
         </div>
       </div>
 
@@ -32,7 +32,3 @@
 
 <gln-loader class="loader"></gln-loader>
 <ui-view ng-show="!isStateLoading && !rendering"></ui-view>
-
-<!-- This div is used to make a render of the visualizations and create a shareable intent to twitter -->
-<div id="helper"></div>
-
