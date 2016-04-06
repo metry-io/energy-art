@@ -20,13 +20,15 @@ angular.module("twitterShare", [])
         svg2png($q, getWidth(), getHeight()).then(function (res) {
           return uploadToImgur($http, res);
         }).then(function (res) {
-            var a = document.getElementById("twitter-share-btn");
-            a.id = "twitter-share-btn";
+            var a = document.createElement("a");
             a.href = "https://twitter.com/intent/tweet?url=" + encodeURI(res);
+            var helper = document.getElementById('helper');
+            helper.appendChild(a);
 
             // We use a timeout to get out of the digest loop, without this it will throw an error
             $timeout(function () {
-              angular.element(a).triggerHandler('click')
+              a.click();
+              helper.removeChild(a);
             }, 0);
           })
           .catch(function (err) {
@@ -61,7 +63,8 @@ function svg2png($q, width, height) {
   canvas.id = "canvas1";
   canvas.width = width;
   canvas.height = height;
-  document.getElementById('pngcon').appendChild(canvas);
+  var helper = document.getElementById('helper');
+  helper.appendChild(canvas);
 
   var xml = new XMLSerializer().serializeToString(svg);
   var imgSrc = 'data:image/svg+xml;base64,' + btoa(xml);
@@ -77,6 +80,7 @@ function svg2png($q, width, height) {
     // We need to draw the image to get correct data url
     context.drawImage(image, 0, 0, canvas.width, canvas.height);
     imageData = canvas.toDataURL();
+    helper.removeChild(canvas);
 
     if (imageData !== undefined) defer.resolve(imageData);
     else defer.reject("unable to create image data");
