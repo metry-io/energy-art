@@ -49,7 +49,6 @@ angular.module("twitterShare", [])
  * @param $q
  * @param width
  * @param height
- * @returns {IPromise<T>}
  */
 function svg2png($q, width, height) {
   var defer = $q.defer();
