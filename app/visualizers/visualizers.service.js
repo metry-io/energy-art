@@ -159,8 +159,8 @@ angular.module('visualizers', ['energimolnet'])
           scope.max = service.max;
           $rootScope.$emit("successData");
           renderVis();
-        }
 
+        }
 
       }
     };
