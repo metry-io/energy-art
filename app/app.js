@@ -49,7 +49,6 @@ angular
 angular.module('energyArtApp').run(['$rootScope', '$state', 'emAuth',
   function ($rootScope, $state, emAuth) {
 
-    // On state change Error, handle authentication
     $rootScope.$on("$stateChangeError", function (event, toState, toParams, fromState, fromParams, err) {
       var code = getURLParameter('code');
 
@@ -64,3 +63,10 @@ angular.module('energyArtApp').run(['$rootScope', '$state', 'emAuth',
 
     });
   }]);
+
+
+// A regular-expression that returns the parameter 'name', code is taken from http://stackoverflow.com/questions/11582512/how-to-get-url-parameters-with-javascript/11582513#11582513
+// NOTE: There seemed to be some problems using Angular services caused by html5Mode
+function getURLParameter(name) {
+  return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search)||[,""])[1].replace(/\+/g, '%20'))||null
+}
