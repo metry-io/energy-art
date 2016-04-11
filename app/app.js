@@ -70,11 +70,3 @@ angular.module('energyArtApp').run(['$rootScope', '$state', 'emAuth',
 function getURLParameter(name) {
   return decodeURIComponent((new RegExp('[?|&]' + name + '=' + '([^&;]+?)(&|#|;|$)').exec(location.search) || [, ""])[1].replace(/\+/g, '%20')) || null
 }
-======
-=
-})
-;
-}])
-;
->>>>>>>
-master
