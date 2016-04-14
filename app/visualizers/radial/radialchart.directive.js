@@ -104,6 +104,10 @@ angular.module('energyArtApp')
                   return d.value + " kWh";
                 });
 
+              // We update the dimensions to enable correct ratio when sharing the image
+              ts.setDimensions(width, height);
+              scope.rendered = true;
+
               /*
                MAKE INFO OPTIONAL
                vis.append("text")
@@ -123,11 +127,10 @@ angular.module('energyArtApp')
                .text(endDate.toDateString())
                */
 
+
+
             };
 
-            // We update the dimensions to enable correct ratio when sharing the image
-            ts.setDimensions(width, height);
-            scope.rendered = true;
           });
         }
       }
