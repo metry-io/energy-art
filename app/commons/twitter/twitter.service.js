@@ -22,6 +22,7 @@ angular.module("twitterShare", [])
         }).then(function (res) {
             var a = document.createElement("a");
             a.href = "https://twitter.com/intent/tweet?url=" + encodeURI(res);
+
             var helper = document.getElementById('helper');
             helper.appendChild(a);
 

@@ -396,13 +396,15 @@ NAVBAR
 VISUALIZERS
 -----------------------------------------------------------*/
 
+#visualization {
+  padding-top: 30px;
+}
 .star path {
   stroke: white;
   stroke-opacity: 0.3;
 }
 
 .node circle {
-  fill-opacity: .25;
   margin: 10px;
 }
 
@@ -424,6 +426,9 @@ VISUALIZERS
 
 #pngcon {
   display: none;
+}
+
+.node {
 }
 
 /*--------------------------------------------------------

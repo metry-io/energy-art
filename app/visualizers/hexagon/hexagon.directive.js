@@ -260,9 +260,6 @@ angular.module('energyArtApp')
 
                var hourLabelOffset = angular.element(window)[0].innerHeight / 2 + 70;
 
-
-
-
                vis.append("text")
                .attr("text-anchor", "middle")
                .attr("font-size", "36px")

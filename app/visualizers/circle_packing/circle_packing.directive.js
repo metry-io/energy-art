@@ -23,8 +23,8 @@ angular.module('energyArtApp')
         function renderVis(){
           d3Service.d3().then(function (d3) {
 
-            var width = 0,
-              height = 0;
+            var width = angular.element(window)[0].innerWidth,
+                height = angular.element(window)[0].innerHeight;
 
             // Make sure that the element i cleaned from svg's
             d3.select(ele[0]).selectAll("svg").remove();
@@ -72,15 +72,20 @@ angular.module('energyArtApp')
             var vis = d3.select(ele[0])
               .append("svg")
               .attr("id", "visualization")
-              .attr("width", config.diameter)
-              .attr("height", config.diameter)
+              .attr("width", width)
+              .attr("height", height)
               .append("g")
-              .attr("transform", "translate(2,2)");
+              .attr("transform", "translate(" + (width / 2 - config.diameter/2)  + "," + (height / 2 - config.diameter/2) + ")");
 
             var color = d3.scale.linear()
               .clamp(true)
               .domain([0, scope.max])
               .range([scope.startColor, scope.endColor]);
+
+            var colorDepth = d3.scale.linear()
+              .clamp(true)
+              .domain([0, 3])
+              .range(["#020202", "#181818"]);
 
             var pack = d3.layout.pack()
               .size([config.diameter - 4, config.diameter - 4])
@@ -94,8 +99,8 @@ angular.module('energyArtApp')
             scope.$watch(function () {
               return angular.element(window)[0].innerWidth;
             }, function () {
-              width = vis.node().getBoundingClientRect().width;
-              height = vis.node().getBoundingClientRect().height;
+              width = angular.element(window)[0].innerWidth;
+              height = angular.element(window)[0].innerHeight;
 
               scope.render(data);
             });
@@ -105,11 +110,14 @@ angular.module('energyArtApp')
               // force update...
               vis.selectAll(".node").remove();
 
+              vis.attr("width", width)
+                .attr("height", height);
+
               var node = vis.datum(data).selectAll(".node")
                 .data(pack.nodes)
                 .enter().append("g")
                 .attr("class", function(d) { return d.children ? "node" : "leaf node"; })
-                .attr("fill", function(d) { return  d.children ? "" : color(d.value); })
+                .attr("fill", function(d) { return  d.children ? colorDepth(d.depth) : color(d.value); })
                 .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
 
               node.append("circle")
@@ -117,7 +125,6 @@ angular.module('energyArtApp')
 
               ts.setDimensions(width, height);
               scope.rendered = true;
-
             };
           });
         }
