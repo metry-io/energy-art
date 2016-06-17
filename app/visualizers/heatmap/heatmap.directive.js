@@ -23,8 +23,8 @@ angular.module('energyArtApp')
 
             console.log("new data");
 
-            var width = angular.element(window)[0].innerWidth,
-              height = angular.element(window)[0].innerHeight;
+            var width = visService.getWidth(),
+              height = visService.getHeight();
 
             // Make sure that the element i cleaned from svg's
             d3.select(ele[0]).selectAll("svg").remove();
@@ -49,8 +49,8 @@ angular.module('energyArtApp')
             scope.$watch(function () {
               return angular.element(window)[0].innerWidth;
             }, function () {
-              width = angular.element(window)[0].innerWidth;
-              height = angular.element(window)[0].innerHeight;
+              var width = visService.getWidth(),
+                height = visService.getHeight();
 
               scope.render(scope.days);
             });
@@ -58,19 +58,20 @@ angular.module('energyArtApp')
             scope.render = function (days) {
 
               var rectWidth = width / scope.numDays,
-                rectHeight = height / 24,
-                xOffset = 1000;
+                rectHeight = height / 24;
 
-              vis .attr("width", width)
+              vis.attr("width", width)
                 .attr("height", height)
                 .attr("fill", "#161616");
 
               vis.attr("transform", function (d, i) {
-                return "translate(" + (Math.floor(i / 24) * rectWidth + xOffset) + ",0)";
+                return "translate(" + (Math.floor(i / 24) * rectWidth) + ",0)";
               });
 
               // force update...
               vis.selectAll("rect").remove();
+
+              var tooltip = d3.select("tooltip");
 
               // Only animate if we have new data
               if (scope.newData) {
@@ -92,6 +93,22 @@ angular.module('energyArtApp')
                   .attr("height", rectHeight)
                   .attr("fill", function (d) {
                     return d.value == null ? 0 : color(d.value);
+                  })
+                  .on("mouseover", function (d) {
+                    var date = new Date(d.date);
+                    // date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + " " + date.getHours()
+                    return tooltip
+                      .style("visibility", "visible")
+                      .html("Consumption: " + d.value + " kWh <br /> Date: " + d.date);
+                  })
+                  .on("mousemove", function () {
+                    return tooltip
+                      .style("top", (event.pageY) + "px")
+                      .style("left", (event.pageX + 10) + "px");
+                  })
+                  .on("mouseout", function () {
+                    return tooltip
+                      .style("visibility", "hidden");
                   });
               }
 
@@ -113,9 +130,21 @@ angular.module('energyArtApp')
                   .attr("fill", function (d) {
                     return d.value == null ? 0 : color(d.value);
                   })
-                  .append("title")
-                  .text(function (d) {
-                    return d.value + " kWh";
+                  .on("mouseover", function (d) {
+                    var date = new Date(d.date);
+                    // date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + " " + date.getHours()
+                    return tooltip
+                      .style("visibility", "visible")
+                      .html("Consumption: " + d.value + " kWh <br /> Date: " + d.date);
+                  })
+                  .on("mousemove", function () {
+                    return tooltip
+                      .style("top", (event.pageY) + "px")
+                      .style("left", (event.pageX + 10) + "px");
+                  })
+                  .on("mouseout", function () {
+                    return tooltip
+                      .style("visibility", "hidden");
                   });
               }
 

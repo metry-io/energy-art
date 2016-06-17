@@ -1,7 +1,12 @@
-# energy-art
+# Energy-art
+-------------------------------
+_This applications aims to use energy consumption data  
+to create abstract visualizations. It connects to a 
+[metry](https://metry.io/en/)-account and bases the visualization on that accounts data.
 
-This project is generated with [yo angular generator](https://github.com/yeoman/generator-angular)
-version 0.12.1.
+## Get started
+  -`npm install`
+  -`bower install`
 
 ## Build & development
 

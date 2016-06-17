@@ -25,11 +25,14 @@ angular.module('energyArtApp')
         function renderVis() {
           d3Service.d3().then(function (d3) {
 
-            var width = angular.element(window)[0].innerWidth,
+            // NOTE: Size of sidebar is 60px
+            var width = angular.element(window)[0].innerWidth - 60,
               height = angular.element(window)[0].innerHeight;
 
             // Make sure that the element i cleaned from svg's
             d3.select(ele[0]).selectAll("svg").remove();
+
+            var tooltip = d3.select("tooltip");
 
             var vis = d3.select(ele[0])
               .append("svg")
@@ -75,7 +78,7 @@ angular.module('energyArtApp')
             scope.$watch(function () {
               return angular.element(window)[0].innerWidth;
             }, function () {
-              width = angular.element(window)[0].innerWidth;
+              width = angular.element(window)[0].innerWidth - 60;
               height = angular.element(window)[0].innerHeight;
 
               if (scope.days !== undefined) scope.render(scope.days);
@@ -99,9 +102,21 @@ angular.module('energyArtApp')
                   return color(d.value)
                 })
                 .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
-                .append("title")
-                .text(function (d) {
-                  return d.value + " kWh";
+                .on("mouseover", function (d) {
+                  var date = new Date(d.date);
+                  // date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + " " + date.getHours()
+                  return tooltip
+                    .style("visibility", "visible")
+                    .html("Consumption: " + d.value + " kWh <br /> Date: " + d.date);
+                })
+                .on("mousemove", function () {
+                  return tooltip
+                    .style("top", (event.pageY) + "px")
+                    .style("left", (event.pageX + 10) + "px");
+                })
+                .on("mouseout", function () {
+                  return tooltip
+                    .style("visibility", "hidden");
                 });
 
               // We update the dimensions to enable correct ratio when sharing the image

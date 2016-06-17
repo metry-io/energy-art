@@ -23,8 +23,8 @@ angular.module('energyArtApp')
         function renderVis() {
           d3Service.d3().then(function (d3) {
 
-            var width = angular.element(window)[0].innerWidth,
-              height = angular.element(window)[0].innerHeight;
+            var width = visService.getWidth(),
+              height = visService.getHeight();
 
             // Make sure that the element i cleaned from svg's
             d3.select(ele[0]).selectAll("svg").remove();
@@ -34,6 +34,8 @@ angular.module('energyArtApp')
               .attr("width", width)
               .attr("height", height)
               .attr("id", "visualization");
+
+            var tooltip = d3.select("tooltip");
 
             var valueScale = d3.scale.linear()
               .domain([0, scope.max])
@@ -56,16 +58,12 @@ angular.module('energyArtApp')
                 return i * 2 * Math.PI / 24;
               });
 
-            window.onresize = function () {
-              scope.$apply();
-            };
-
             // Watch for resize event
             scope.$watch(function () {
               return angular.element(window)[0].innerWidth;
             }, function () {
-              width = angular.element(window)[0].innerWidth;
-              height = angular.element(window)[0].innerHeight;
+              width = visService.getWidth(),
+              height = visService.getHeight();
 
               scope.render(scope.days);
             });
@@ -89,7 +87,35 @@ angular.module('energyArtApp')
                   return color(d.value);
                 })
                 .attr("opacity", "0.05")
-                .append("title");
+                .on("mouseover", function (d, i) {
+                // date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + " " + date.getHours()
+
+                  var hour = i % 24;
+
+                  if(hour < 10){
+                    return tooltip
+                      .style("visibility", "visible")
+                      .html("Hour: 0" + hour + ".00");
+                  } else {
+                    return tooltip
+                      .style("visibility", "visible")
+                      .html("Hour: " + hour + ".00");
+                  }
+
+                })
+                .on("mousemove", function () {
+                  return tooltip
+                    .style("top", (event.pageY) + "px")
+                    .style("left", (event.pageX + 10) + "px");
+                })
+                .on("mouseout", function () {
+                  return tooltip
+                    .style("visibility", "hidden");
+                });
+
+              window.onresize = function () {
+                scope.$apply();
+              };
 
               // We update the dimensions to enable correct ratio when sharing the image
               ts.setDimensions(width, height);

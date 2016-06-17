@@ -23,8 +23,8 @@ angular.module('energyArtApp')
         function renderVis(){
           d3Service.d3().then(function (d3) {
 
-            var width = angular.element(window)[0].innerWidth,
-                height = angular.element(window)[0].innerHeight;
+            var width = visService.getWidth(),
+              height = visService.getHeight();
 
             // Make sure that the element i cleaned from svg's
             d3.select(ele[0]).selectAll("svg").remove();
@@ -65,7 +65,7 @@ angular.module('energyArtApp')
               }
 
 
-              data.children[yIt].children[mIt].children[dIt].children.push({hour: hour, value: d.value});
+              data.children[yIt].children[mIt].children[dIt].children.push({hour: hour, value: d.value, date: d.date});
 
             });
 
@@ -76,6 +76,8 @@ angular.module('energyArtApp')
               .attr("height", height)
               .append("g")
               .attr("transform", "translate(" + (width / 2 - config.diameter/2)  + "," + (height / 2 - config.diameter/2) + ")");
+
+            var tooltip = d3.select("tooltip");
 
             var color = d3.scale.linear()
               .clamp(true)
@@ -99,8 +101,8 @@ angular.module('energyArtApp')
             scope.$watch(function () {
               return angular.element(window)[0].innerWidth;
             }, function () {
-              width = angular.element(window)[0].innerWidth;
-              height = angular.element(window)[0].innerHeight;
+              var width = visService.getWidth(),
+                height = visService.getHeight();
 
               scope.render(data);
             });
@@ -118,7 +120,25 @@ angular.module('energyArtApp')
                 .enter().append("g")
                 .attr("class", function(d) { return d.children ? "node" : "leaf node"; })
                 .attr("fill", function(d) { return  d.children ? colorDepth(d.depth) : color(d.value); })
-                .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+                .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; })
+                .on("mouseover", function (d) {
+                  var date = new Date(d.date);
+                  // date.getFullYear() + "-" + date.getMonth() + "-" + date.getDate() + " " + date.getHours()
+                  if(!d.children){
+                    return tooltip
+                      .style("visibility", "visible")
+                      .html("Consumption: " + d.value + " kWh <br /> Date: " + d.date);
+                  }
+                })
+                .on("mousemove", function () {
+                  return tooltip
+                    .style("top", (event.pageY) + "px")
+                    .style("left", (event.pageX + 10) + "px");
+                })
+                .on("mouseout", function () {
+                  return tooltip
+                    .style("visibility", "hidden");
+                });
 
               node.append("circle")
                 .attr("r", function(d) { return d.r; });

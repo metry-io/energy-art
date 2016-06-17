@@ -20,11 +20,14 @@ angular.module('energyArtApp')
         function renderVis() {
           d3Service.d3().then(function (d3) {
 
-            var width = angular.element(window)[0].innerWidth,
-              height = angular.element(window)[0].innerHeight;
+            var width = visService.getWidth(),
+              height = visService.getHeight();
 
             // Make sure that the element i cleaned from svg's
             d3.select(ele[0]).selectAll("svg").remove();
+
+            // get the tooltip
+            var tooltip = d3.select("tooltip");
 
             var vis = d3.select(ele[0]).append("svg")
               .attr("id", "visualization")
@@ -79,11 +82,15 @@ angular.module('energyArtApp')
             var vDist = hexagonHeight * 3 / 4;
             var hDist = hexagonWidth;
 
+            var hourScale = d3.time.scale()
+              .domain([(new Date()).setHours(0), (new Date()).setHours(23)])
+              .range([0, hexagonSize]);
+
 
             scope.hexagons = calcHexagons(hexagonSize, hRes, vRes);
 
             var ws = d3.scale.linear()
-              .domain([0, 19])
+              .domain([0, hexagonSize - 1])
               .range([0, max]);
 
             // Bind data to each hexagon
@@ -92,16 +99,18 @@ angular.module('energyArtApp')
               var col = index % 24;
 
               hexagon.value = binData[col][row];
-              hexagon.consumption = ws(19 - row);
+              hexagon.consumption = ws(hexagonSize - 1 - row);
+              // This depends on the fact that the amount of hexagons in the horizontal direction is 24..
+              hexagon.time = col;
             });
 
             var scaleX = d3.scale.linear()
               .domain([0, hDist * hRes])
-              .range([0, angular.element(window)[0].innerWidth / 2]);
+              .range([0, width / 2]);
 
             var scaleY = d3.scale.linear()
               .domain([0, vDist * vRes])
-              .range([0, angular.element(window)[0].innerHeight / 2]);
+              .range([0, height / 2]);
 
             window.onresize = function () {
               scope.$apply();
@@ -112,8 +121,8 @@ angular.module('energyArtApp')
               return angular.element(window)[0].innerWidth;
 
             }, function () {
-              var width = angular.element(window)[0].innerWidth;
-              var height = angular.element(window)[0].innerHeight;
+              var width = visService.getWidth(),
+                  height = visService.getHeight();
 
               //TODO: take into account the ratio difference for a "normal" screen resolution
               scaleX = d3.scale.linear()
@@ -124,33 +133,10 @@ angular.module('energyArtApp')
                 .domain([0, vDist * vRes])
                 .range([0, height + vDist]);
 
-              scope.render(scope.hexagons);
+              scope.render(scope.hexagons, width, height);
             });
 
-            scope.render = function (hexagons) {
-              var width = angular.element(window)[0].innerWidth;
-              var height = angular.element(window)[0].innerHeight;
-
-              /*
-               MAKE THESE OPTIONAL
-
-               var wattScale = d3.scale.linear()
-               .domain([0, max])
-               .range([angular.element(window)[0].innerHeight / 2, 0]);
-
-               var yAxis = d3.svg.axis()
-               .scale(wattScale)
-               .orient("left")
-               .ticks(20);
-
-               vis.append("g")
-               .attr("height", "100%")
-               .attr("width", "100%")
-               .attr("fill", "#A4A4A4")
-               .attr("transform", "translate(60,0)")
-               .call(yAxis);
-
-               */
+            scope.render = function (hexagons, width, height) {
 
               // force an update by removing all the polygons rendered
               // this can be improved by creating a separate update function
@@ -179,105 +165,27 @@ angular.module('energyArtApp')
                 .attr("fill", function (d) {
                   return color(d.value);
                 })
-                .append("svg:title")
-                .text(function (d) {
-                  return d.value + " occurances around " + Math.round(d.consumption * 100) + " Wh in consumption";
+                .on("mouseover", function (d) {
+                  var date = new Date(d.date);
+                  return tooltip
+                    .style("visibility", "visible")
+                    .html("Occurances: " + d.value + "<br>" +
+                      "Consumption: " + Math.round(d.consumption * 100) + "Wh<br>" +
+                      "Hour: " + d.time);
+                })
+                .on("mousemove", function () {
+                  return tooltip
+                    .style("top", (event.pageY) + "px")
+                    .style("left", (event.pageX + 10) + "px");
+                })
+                .on("mouseout", function () {
+                  return tooltip
+                    .style("visibility", "hidden");
                 });
 
               ts.setDimensions(width, height);
               scope.rendered = true;
 
-              /*
-
-               var x = d3.scale.linear()
-               .domain([0, 180])
-               .range([width *0.15,  width *0.85])
-               .clamp(true);
-
-               var brush = d3.svg.brush()
-               .x(x)
-               .extent([0, 0])
-               .on("brush", brushed);
-
-
-               var slider = vis.append("g")
-               .call(brush);
-
-               slider.selectAll(".extent,.resize")
-               .remove();
-
-               slider.select(".background")
-               .attr("height", 20)
-               .attr("y", height * 0.95);
-
-               var handle = slider.append("circle")
-               .attr("class", "handle")
-               .attr("transform", "translate(0," + height *0.95 + ")")
-               .attr("r", 9);
-
-               slider
-               .call(brush.event)
-               .transition() // gratuitous intro!
-               .duration(750)
-               .call(brush.extent([70, height * 0.95]))
-               .call(brush.event);
-
-               function brushed() {
-               var value = brush.extent()[0];
-
-               if (d3.event.sourceEvent) { // not a programmatic event
-               value = x.invert(d3.mouse(this)[0]);
-               brush.extent([value, value]);
-               }
-
-               handle.attr("cx", x(value));
-               }
-               */
-
-              /*
-               MAKE THIS OPTIONAL
-
-               var hourScale = d3.time.scale()
-               // e.g. for 23 h span "2015-03-25T01:00:00" - "2015-03-25T24:00:00"
-               .domain([new Date("2015-03-25T01:00:00"), new Date("2015-03-25T24:00:00")])
-               .range([0, angular.element(window)[0].innerWidth / 2]);
-
-               var xAxis = d3.svg.axis()
-               .scale(hourScale)
-               .orient("bottom")
-               .ticks(d3.time.hour, 1)
-               .tickFormat(d3.time.format("%H:%M"));
-
-
-               vis.append("g")
-               .attr("width", angular.element(window)[0].innerWidth / 2 + 50)
-               // should be translated by the same height as the svg for the visualization
-               .attr("fill", "#A4A4A4")
-               .attr("transform", "translate(60," + angular.element(window)[0].innerHeight / 2 + ")")
-               .call(xAxis)
-               .selectAll("text")
-               .attr("transform", "translate(30,20)rotate(45)");;
-
-               var hourLabelOffset = angular.element(window)[0].innerHeight / 2 + 70;
-
-               vis.append("text")
-               .attr("text-anchor", "middle")
-               .attr("font-size", "36px")
-               .attr("font-weight", "800")
-               .attr("fill", "#A4A4A4")
-               .attr("transform", "translate(" + angular.element(window)[0].innerWidth / 2 + "," + hourLabelOffset+ ")")
-               .text("Hour");
-
-               var kWhLabelOffset = angular.element(window)[0].innerHeight / 2 - 20;
-
-               vis.append("text")
-               .attr("text-anchor", "middle")
-               .attr("font-size", "36px")
-               .attr("font-weight", "800")
-               .attr("fill", "#A4A4A4")
-               .attr("transform", "translate(30 , " + kWhLabelOffset+ ")rotate(-90)")
-               .text("kWh");
-               */
             };
 
           });

@@ -4,6 +4,8 @@ angular.module('visualizers', ['energimolnet'])
     service.meters = "meters";
 
     var parameters = [];
+    const sidebarWidth = 60;
+
     parameters.meter = undefined;
     parameters.startDate = undefined;
     parameters.endDate = undefined;
@@ -73,6 +75,14 @@ angular.module('visualizers', ['energimolnet'])
         });
       }
 
+    };
+
+    service.getWidth = function() {
+      return  angular.element(window)[0].innerWidth - sidebarWidth;
+    };
+
+    service.getHeight = function() {
+      return angular.element(window)[0].innerHeight;
     };
 
     service.setStartDate = function(date){

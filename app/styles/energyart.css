@@ -2,6 +2,12 @@
 --------------------------------------------------------------
  CUSTOM STYLES
  ----------------------------------------------------------------*/
+/*
+  Make sure that there is no scrolling cause it will make the visualizations pop out of place
+*/
+body {
+  overflow: hidden;
+}
 
 .fill {
   height: 100%;
@@ -144,9 +150,10 @@ SIDEBAR
 */
 
 .sidebar {
-  margin: 0;
-  position: absolute;
+  float:left;
+  position: relative;
   height: 100%;
+  width: 60px;
   z-index: 2;
 
   -webkit-box-shadow: 5px 6px 23px 1px rgba(0, 0, 0, 0.43);
@@ -157,7 +164,6 @@ SIDEBAR
 .sidebar-tabs {
   padding-top: 20px;
   background: #101010;
-  width: 60px;
   height: 100%;
 }
 
@@ -397,7 +403,7 @@ VISUALIZERS
 -----------------------------------------------------------*/
 
 #visualization {
-  padding-top: 30px;
+  float:left;
 }
 .star path {
   stroke: white;
@@ -448,4 +454,23 @@ AUTHENTICATION PAGE
 
 #logo {
   width: 100%;
+}
+
+/*---------------------------------------------------------
+TOOLTIP
+----------------------------------------------------------*/
+
+
+.my-tooltip {
+  color: white;
+  background: rgba(0, 0, 0, 1);
+  padding: 10px;
+
+  -webkit-box-shadow: 3px 4px 19px 0px rgba(0, 0, 0, 0.75);
+  -moz-box-shadow: 3px 4px 19px 0px rgba(0, 0, 0, 0.75);
+  box-shadow: 3px 4px 19px 0px rgba(0, 0, 0, 0.75);
+
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  border-radius: 5px;
 }
