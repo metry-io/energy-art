@@ -37,13 +37,6 @@ angular.module('visualizers', ['energimolnet'])
           "url": "circle_packing",
           "granularity": "day"
         },
-        /*
-        {
-          "name": "Geomap",
-          "url": "geomap",
-          "granularity": ["day", "month", "year"]
-        },
-        */
         {
           "name": "Star",
           "url": "star",

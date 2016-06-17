@@ -77,7 +77,7 @@ function svg2png($q, width, height) {
   var imageData;
 
   image.onload = function () {
-    // We need to draw the image to get correct data url
+    // We need to draw the image to get the correct data url
     context.drawImage(image, 0, 0, canvas.width, canvas.height);
     imageData = canvas.toDataURL();
     helper.removeChild(canvas);

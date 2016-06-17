@@ -6,8 +6,6 @@ angular.module('commons', ['energimolnet'])
       getMeterDayData: getMeterDayData,
       getMaxHourValue: getMaxHourValue,
       getMeters: getMeters,
-      addCounty: addCounty,
-      getCounty: getCounty,
       getLatestConsumptionDate: getLatestConsumptionDate,
       getMinDate: getMinDate,
       getMaxDate: getMaxDate
@@ -20,11 +18,9 @@ angular.module('commons', ['energimolnet'])
     //////////////////////////////////////////////////////////////////
 
     function getMeters() {
-      var meters = emMeters.query({box: 'active', 'consumption_stats.energy.hour.count': '>0'}).then(function (res) {
-        var meters = res.data;
-        return meters;
+      return emMeters.query({box: 'active', 'consumption_stats.energy.hour.count': '>0'}).then(function (res) {
+        return res.data;
       });
-      return meters;
     }
 
     function getMeterDayData(meter, startDate, endDate) {
@@ -91,22 +87,6 @@ angular.module('commons', ['energimolnet'])
           return m.consumption_stats.energy.hour.min;
         });
     }
-
-    //NEXT: Find a way to store already retrieved data to minimize the number of calls to the google geocoder API
-    function addCounty(address) {
-      var geocoder = new google.maps.Geocoder();
-
-      geocoder.geocode({"address": address}, function (results, status) {
-        alert(results[0].address_components[2].short_name);
-        counties.push(results[0].address_components[2].short_name);
-
-      });
-    }
-
-    function getCounty(address) {
-      return counties;
-    }
-
 
 
   });
