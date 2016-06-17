@@ -1,4 +1,4 @@
-![Energy Art Logo]:(https://github.com/metry-io/energy-art/raw/master/app/images/energyart_logo.png ":,)")
+[Energy Art Logo]:https://github.com/metry-io/energy-art/raw/master/app/images/energyart_logo.png ":,)"
 Energy Art
 ----------
 _This applications aims to use energy consumption data to  
