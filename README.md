@@ -5,7 +5,6 @@ create abstract visualizations. It connects to a [metry](https://metry.io/en/)-a
   
 ## Get started
   -`npm install`  
-  -`bower install`
   
 ## Build & development
 
