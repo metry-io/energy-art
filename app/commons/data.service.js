@@ -1,6 +1,6 @@
 
 angular.module('commons', ['energimolnet'])
-  .factory('dataservice', function ($rootScope, emMeters, emDateUtil, emConsumptions) {
+  .factory('dataservice', function ($rootScope, emMeters, emDateUtil, emConsumptions, emAccounts) {
 
     var service = {
       getMeterDayData: getMeterDayData,
@@ -18,7 +18,7 @@ angular.module('commons', ['energimolnet'])
     //////////////////////////////////////////////////////////////////
 
     function getMeters() {
-      return emMeters.query({box: 'active', 'consumption_stats.energy.hour.count': '>0'}).then(function (res) {
+      return emAccounts.get('me/meters?box=active&consumption_stats.energy.hour.count=>0').then(function (res) {
         return res.data;
       });
     }
